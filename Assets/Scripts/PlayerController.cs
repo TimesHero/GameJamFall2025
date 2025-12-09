@@ -7,6 +7,9 @@ public class PlayerController : MonoBehaviour
     float m_speed = 5f;
     float m_tornado_val = 1f;
     Vector3 m_scale_vector;
+    [SerializeField] ScoreManager m_score_manager;
+    // index 0 = total consumed, 1 = obstacle 1
+    int[] m_obstacles_consumed;
     void Start()
     {
         m_scale_vector = transform.localScale;
@@ -29,5 +32,15 @@ public class PlayerController : MonoBehaviour
     public void increaseTornadoValue(float val)
     {
         m_tornado_val += val;
+    }
+
+    void incrementConsumeStats(int type)
+    {
+        m_obstacles_consumed[type]++;
+    }
+
+    void OnDestroy()
+    {
+        m_score_manager.setConsumeStats(m_obstacles_consumed);
     }
 }

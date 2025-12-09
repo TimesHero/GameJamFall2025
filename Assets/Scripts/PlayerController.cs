@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     Vector3 m_scale_vector;
     [SerializeField] ScoreManager m_score_manager;
     // index 0 = total consumed, 1 = obstacle1
-    int[] m_obstacles_consumed;
+    int[] m_obstacles_consumed = new int[2];
     void Start()
     {
         m_scale_vector = transform.localScale;

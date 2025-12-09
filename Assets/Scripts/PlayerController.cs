@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     float m_tornado_val = 1f;
     Vector3 m_scale_vector;
     [SerializeField] ScoreManager m_score_manager;
-    // index 0 = total consumed, 1 = obstacle 1
+    // index 0 = total consumed, 1 = obstacle1
     int[] m_obstacles_consumed;
     void Start()
     {
@@ -34,8 +34,9 @@ public class PlayerController : MonoBehaviour
         m_tornado_val += val;
     }
 
-    void incrementConsumeStats(int type)
+    public void incrementConsumeStats(int type)
     {
+        m_obstacles_consumed[0]++;
         m_obstacles_consumed[type]++;
     }
 

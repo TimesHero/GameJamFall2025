@@ -4,7 +4,7 @@ public class ConsumableObjectHandler : MonoBehaviour
 {
     float m_val = 1f;
     PlayerController m_player_controller;
-    // 1 = obstacle1, 2 = tree
+    // 1 = small_bush, 2 = big_bush, 3 = tree, 4 = house
     [SerializeField] int m_obstacle_type;
     void Start()
     {

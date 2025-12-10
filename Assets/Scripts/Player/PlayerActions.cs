@@ -61,8 +61,8 @@ public class PlayerActions : MonoBehaviour
     {
 
         // Setup player components using the player game object
-        player_body = player_object.GetComponent<Rigidbody2D>();
-        player_sprite = player_object.GetComponent<SpriteRenderer>();
+        m_player_body = m_player_object.GetComponent<Rigidbody2D>();
+        m_player_sprite = m_player_object.GetComponent<SpriteRenderer>();
 
     }
 
@@ -162,7 +162,7 @@ public class PlayerActions : MonoBehaviour
         float half_flash_duration = flash_duration/2;
 
         // We Make the model non-opaque red then white again to cause a flash
-        for (int current_flash = 0; current_flash < total_flashes; i++) {
+        for (int current_flash = 0; current_flash < total_flashes; current_flash++) {
 
             // Flash Mechansism
             // (1) Add sprite red tint
@@ -171,7 +171,7 @@ public class PlayerActions : MonoBehaviour
             // (4) wait half flash
             m_player_sprite.color = new Color(1, 0, 0, iframe_opacity);
             yield return new WaitForSeconds(half_flash_duration);
-            m_player_sprite = Color.white;
+            m_player_sprite.color = Color.white;
             yield return new WaitForSeconds(half_flash_duration);
 
         }

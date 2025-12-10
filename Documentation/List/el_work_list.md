@@ -24,5 +24,15 @@ List of work completed or to be completed by El.
 - [ ] Add iframes
 - [ ] Fix velocity of player
 
+## Work Done
+
+- **2025-12-09**
+    * Add Documentation: index.md
+    * Add Documentation: Documentation Directory
+    * Add Documentation: Assets Subdirectories
+    * Add Documentation: Work Lists for all members
+    * Add player controls
+    * Add player controls script: Assets/Scripts/PlayerActions
+
 [<< Return to Work Lists](./list.md)
 [<<< Return to Main](../../index.md)

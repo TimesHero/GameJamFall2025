@@ -3,17 +3,20 @@ title: index
 description: Index: Game Jam: Year 1
 
 authors: Lirael
-created: 2025-12-04
+created: 2025-12-08
 ```
 
 # Game Jam: Year 1
 
 Game Jam for Fall 2025 (December 2025)
 
+## Index
 
 <!--toc:start-->
 - [Game Jam: Year 1](#game-jam-year-1)
-  - [Structure](#structure)
+  - [Index](#index)
+  - [Structure: Documentation](#structure-documentation)
+  - [Structure: Unity Assets](#structure-unity-assets)
   - [Group Names](#group-names)
 <!--toc:end-->
 
@@ -29,9 +32,11 @@ Game Jam for Fall 2025 (December 2025)
        * [Work List: Vukan](./Documentation/List/vukan_work_list.md)
    - [Ideas:](./Documentation/Ideas/ideas.md) Ideas regarding game design and editing
 
+[^ Return to Index](#index)
+
 ## Structure: Unity Assets
 
-(Within ./Assets)
+(Within _./Assets_)
 
 - [**Audio:**](./Assets/Audio/) All audio
     * [**Music:**](./Assets/Audio/Music/music_notes.md) Background and other music
@@ -42,9 +47,11 @@ Game Jam for Fall 2025 (December 2025)
     * [**Sprites:**](./Assets/Visuals/Sprites/sprite_notes.md)  Sprite art
     * [**UI:**](./Assets/Visuals/UI/ui_notes.md) Panels, backgrounds and other elements for UI
 
+[^ Return to Index](#index)
+
 ## Group Names
 
-(Listed alphabetically)
+_(Listed alphabetically)_
 
 - Aj Fraser (Game Planner)
 - Lirael "El" Khan (Programmer)
@@ -52,5 +59,7 @@ Game Jam for Fall 2025 (December 2025)
 - Rhys Lourie (Artist)
 - Vladilav Grigorev (Audio)
 - Vukan (Audio SFX)
+
+[^ Return to Index](#index)
 
 ___

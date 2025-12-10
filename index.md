@@ -15,8 +15,8 @@ version: 1.1.1
 
 ## Structure
 
-   - [Code Rules:] Rules on how to maintain files, directories and code
-   - [Work Lists:] List of things to be done
-   - [Ideas:] Ideas regarding game design and editing
+   - [Code Rules:](./Documentation/CodeRules/code_rules_index.md) Rules on how to maintain files, directories and code
+   - [Work Lists:](./Documentation/List/list_index.md) List of things to be done
+   - [Ideas:](./Documentation/Ideas/ideas_index.md) Ideas regarding game design and editing
 
 ___

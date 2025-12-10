@@ -1,11 +1,9 @@
 ```
 title: code_rules_index
-description: 
-authors: DragoonSakura
-categories: 
-created: 2025-12-04T06:25:12-0500
-updated: 2025-12-04T06:27:47-0500
-version: 1.1.1
+description: Rules for writing and maintaing code
+
+authors: Lirael
+created: 2025-12-04
 ```
 
 [<<< Return to Main](../../index.md)

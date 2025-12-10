@@ -1,21 +1,24 @@
 ```
 title: name_conventions
 description: Conventions for naming various elements in code/files/directories
-authors: DragoonSakura
-categories: [
-    Index
-    Code Rules
-]
-created: 2025-12-04T06:57:15-0500
-updated: 2025-12-04T07:05:24-0500
-version: 1.1.1
+
+authors: Lirael
+created: 2025-12-04
 ```
 
 [<<< Return to Main](../../index.md)
+[<< Return to Code Rules](./code_rules.md)
 
-* Code Rules: Naming Conventions
+# Code Rules: Naming Conventions
 
   Naming conventions for variou elements of code
+
+<!--toc:start-->
+- [Code Rules: Naming Conventions](#code-rules-naming-conventions)
+  - [List: Conventions](#list-conventions)
+<!--toc:end-->
+
+## List: Conventions
 
   - **Variable Names:**
       * Snake Case
@@ -40,4 +43,5 @@ version: 1.1.1
 
 ___
 
+[<< Return to Code Rules](./code_rules.md)
 [<<< Return to Main](../../index.md)

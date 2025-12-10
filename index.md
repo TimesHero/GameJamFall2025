@@ -21,6 +21,12 @@ Game Jam for Fall 2025 (December 2025)
 
    - [Code Rules:](./Documentation/CodeRules/code_rules.md) Rules on how to maintain files, directories and code
    - [Work Lists:](./Documentation/List/list.md) List of things to be done
+       * [Work List: Aj](./Documentation/List/aj_work_list.md)
+       * [Work List: El](./Documentation/List/el_work_list.md)
+       * [Work List: Maxis](./Documentation/List/maxim_work_list.md)
+       * [Work List: Rhys](./Documentation/List/rhys_work_list.md)
+       * [Work List: Vladilav](./Documentation/List/vladilav_work_list.md)
+       * [Work List: Vukan](./Documentation/List/vukan_work_list.md)
    - [Ideas:](./Documentation/Ideas/ideas.md) Ideas regarding game design and editing
 
 ## Structure: Unity Assets

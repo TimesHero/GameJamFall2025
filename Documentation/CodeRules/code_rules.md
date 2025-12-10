@@ -3,7 +3,7 @@ title: code_rules_index
 description: Rules for writing and maintaing code
 
 authors: Lirael
-created: 2025-12-04
+created: 2025-12-09
 ```
 
 [<<< Return to Main](../../index.md)

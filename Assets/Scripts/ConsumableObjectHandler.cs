@@ -4,11 +4,10 @@ public class ConsumableObjectHandler : MonoBehaviour
 {
     float m_val = 1f;
     PlayerController m_player_controller;
+    // 1 = obstacle1, 2 = tree
     [SerializeField] int m_obstacle_type;
     void Start()
     {
-        // determine value and assign to the object
-        m_obstacle_type = 1;
     }
     // arbitrary comment for testing purposes
     void OnTriggerEnter2D(Collider2D collision)

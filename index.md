@@ -31,8 +31,9 @@ Game Jam for Fall 2025 (December 2025)
     * [**Music:**](./Assets/Audio/Music/music_notes.md) Background and other music
     * [**SFX:**](./Assets/Audio/SFX/sfx_notes.md) Sound effects
 - [**Visuals:**](./Assets/Visuals/visual_notes.md) All visuals
-    * [**Art:**](./Assets/Visuals/Sprites) All art
+    * [**Art:**](./Assets/Visuals/Art/art_notes.md) All art
     * [**Icons:**](./Assets/Visuals/Icons/icon_notes.md) Icons used in game and UI
+    * [**Sprites:**](./Assets/Visuals/Sprites/sprite_notes.md)  Sprite art
     * [**UI:**](./Assets/Visuals/UI/ui_notes.md) Panels, backgrounds and other elements for UI
 
 ## Group Names

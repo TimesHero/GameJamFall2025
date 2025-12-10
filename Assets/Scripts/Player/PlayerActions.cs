@@ -67,6 +67,47 @@ public class PlayerActions : MonoBehaviour
 
     // === START: Custom Methods ===
 
+    /*
+    * @Brief: Activates iframes for specified duration then deactivates
+    *
+    * - Activates iframes (disable collisions with enemies)
+    * - Flash red desired times
+    * - Deactivate iframes
+    * - Uses player and enemy layers to toggle collisions on/off
+    *
+    * @Arg: iframe_duration_sec => Duration to keep iframes active (IN SECONDS)
+    * @Arg: iframe_opacity => The player sprite opacity while iframes are active
+    * @Arg: total_flashes => Times player sprite flashes during iframes
+    * @Arg: player_layer => Layer used for player
+    * @Arg: enemy_layer => Layer used for enemies
+    *
+    * @WARNING: Enemies and Player MUST be on different layers
+    * @WARNING: USES yeild -> WaitForSeconds (Requires subroutine)
+    *
+    * @Return: N/A
+    */
+    private void triggerIFrames(int iframe_duration_sec = 3, float iframe_opacity = 0.6f, int total_flashes = 1, int player_layer = 9, int enemy_layer = 10) {
+
+        // Disable then Enable Collisions between layers
+        // Player and Enemy layers must be separate
+        Physics2D.IgnoreLayerCollision(player_layer, enemy_layer, true);
+
+        // If we need N total flashes
+        // We need iframe_duration_sec/N for each (to make them equal duration)
+        float flash_duration = ((float) iframe_duration_sec)/((float) total_flashes);
+
+        // We Make the model non-opaque red then white again to cause a flash
+        for (int current_flash = 0; current_flash < total_flashes; i++) {
+
+            m_player_sprite.color = new Color(1, 0, 0, iframe_opacity);
+            yield return new WaitForSeconds(flash_duration);
+            m_player_sprite = Color.white;
+
+        }
+
+        Physics2D.IgnoreLayerCollision(player_layer, enemy_layer, false);
+
+    }
 
 
     // === END: Custom Methods ===

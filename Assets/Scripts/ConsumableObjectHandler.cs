@@ -4,7 +4,7 @@ public class ConsumableObjectHandler : MonoBehaviour
 {
     float m_val = 1f;
     PlayerController m_player_controller;
-    int m_obstacle_type;
+    [SerializeField] int m_obstacle_type;
     void Start()
     {
         // determine value and assign to the object

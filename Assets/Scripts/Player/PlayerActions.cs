@@ -35,11 +35,20 @@ public class PlayerActions : MonoBehaviour
     private SpriteRenderer m_player_sprite;
 
     // Attributes: Movement Settings and variables
-    [SerializeField] private float m_player_speed = 5;
-    private Vector2 m_movement_direction;
+    // The max speed of the player IGNORING DIRECTION!
+    [SerializeField] private float m_max_player_speed = 5f;
+    // Current and Max Velocities account for direction
+    // These are tracked to manage player acceleration and movement changes
+    private Vector3 m_current_max_velocity = new Vector3();
+    private Vector3 m_current_velocity = new Vector3();
+    [SerializeField] private float m_player_acceleration = 1f;
+    private Vector2 m_movement_direction = new Vector3();
 
     // Attributes: Control Schemes
-    [SerializeField] private InputActionReference movement_controls;
+    [SerializeField] private InputActionReference m_movement_controls;
+
+    // Attributes: Damage Management
+    [SerializeField] private int m_iframe_duration_sec = 3;
 
     // === END: Attributes ===
 
@@ -51,6 +60,7 @@ public class PlayerActions : MonoBehaviour
     void Start()
     {
 
+        // Setup player components using the player game object
         player_body = player_object.GetComponent<Rigidbody2D>();
         player_sprite = player_object.GetComponent<SpriteRenderer>();
 
@@ -66,6 +76,57 @@ public class PlayerActions : MonoBehaviour
     // -------------------------------------------------------------
 
     // === START: Custom Methods ===
+
+    // === START: Getter/Setter Methods ===
+
+    // === END: Getter/Setter Methods ===
+
+    /*
+    * @Brief: Gets a vector of the max player velocity
+    *
+    * - Uses build in Unity attribute to get mouse position
+    * - The final vector must reflect the speed in both x and y directions
+    *
+    * @Return: (Vector3) Max velocity vector (max velocity in each direction)
+    */
+    private Vector3 getMaxPlayerVelocity() {
+
+        // Unity built in way to get vector for mouse position
+        Vector3 current_mouse_pos = Input.mousePosition;
+
+        // The players max speed IGNORES DIRECTION
+        // Need to scalar multiply to get directional velocity
+        Vector3 max_velocity = new Vector3(current_mouse_pos.x * m_max_player_speed,
+                                                current_mouse_pos.y * m_max_player_speed, 0);
+
+            return max_velocity;
+    }
+
+    /*
+    * @Brief: Uses the current mouse position to set the new player direction
+    *
+    * @NOTE: Only called when the player clicks to change/update direction
+    *
+    * @Return: N/A
+    */
+    private void updateDirection() {
+
+
+    }
+
+    /*
+    * @Brief: Updates the velocity (current speed and direction) of the player
+    *
+    * - Uses mouse position to set direction
+    * - Sets velocity
+    * - ramps velocity until max player speed reached reached or direction changed
+    *
+    * @Return: N/A
+    */
+    private void updatePlayerVelocity() {
+
+
+    }
 
     /*
     * @Brief: Activates iframes for specified duration then deactivates
@@ -86,7 +147,9 @@ public class PlayerActions : MonoBehaviour
     *
     * @Return: N/A
     */
-    private void triggerIFrames(int iframe_duration_sec = 3, float iframe_opacity = 0.6f, int total_flashes = 1, int player_layer = 9, int enemy_layer = 10) {
+    private IEnumerator triggerIFrames(int iframe_duration_sec = 3,
+                                        float iframe_opacity = 0.6f, int total_flashes = 1,
+                                        int player_layer = 9, int enemy_layer = 10) {
 
         // Disable then Enable Collisions between layers
         // Player and Enemy layers must be separate
@@ -95,13 +158,21 @@ public class PlayerActions : MonoBehaviour
         // If we need N total flashes
         // We need iframe_duration_sec/N for each (to make them equal duration)
         float flash_duration = ((float) iframe_duration_sec)/((float) total_flashes);
+        // We want it to flash red then normal EACH for half the duration of a flash
+        float half_flash_duration = flash_duration/2;
 
         // We Make the model non-opaque red then white again to cause a flash
         for (int current_flash = 0; current_flash < total_flashes; i++) {
 
+            // Flash Mechansism
+            // (1) Add sprite red tint
+            // (2) wait half flash
+            // (3)turn sprite normal color
+            // (4) wait half flash
             m_player_sprite.color = new Color(1, 0, 0, iframe_opacity);
-            yield return new WaitForSeconds(flash_duration);
+            yield return new WaitForSeconds(half_flash_duration);
             m_player_sprite = Color.white;
+            yield return new WaitForSeconds(half_flash_duration);
 
         }
 

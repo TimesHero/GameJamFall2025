@@ -39,13 +39,13 @@ public class PlayerActions : MonoBehaviour
     [SerializeField] private float m_max_player_speed = 5f;
     // Current and Max Velocities account for direction
     // These are tracked to manage player acceleration and movement changes
-    private Vector3 m_current_max_velocity = new Vector3();
-    private Vector3 m_current_velocity = new Vector3();
+    private Vector3 m_current_max_velocity = new Vector3(0f, 0f, 0f);
+    private Vector2 m_current_velocity = new Vector2(0f, 0f);
     [SerializeField] private float m_player_acceleration = 1f;
-    private Vector2 m_movement_direction = new Vector3();
+    private Vector3 m_movement_direction = new Vector3(0f, 0f, 0f);
 
     // Attributes: Control Schemes
-    [SerializeField] private InputActionReference m_movement_controls;
+    [SerializeField] private InputActionReference m_move_confirm;
 
     // Attributes: Damage Management
     [SerializeField] private int m_iframe_duration_sec = 3;
@@ -55,6 +55,18 @@ public class PlayerActions : MonoBehaviour
     // -------------------------------------------------------------
 
     // === START: Unity Methods ===
+
+    void OnEnable() {
+
+        m_move_confirm.action.started += triggerPlayerMove;
+
+    }
+
+    void OnDisable() {
+
+        m_move_confirm.action.started -= triggerPlayerMove;
+
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -69,6 +81,9 @@ public class PlayerActions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        updatePlayerVelocity();
+
     }
 
     // === END: Unity Methods ===
@@ -89,29 +104,49 @@ public class PlayerActions : MonoBehaviour
     *
     * @Return: (Vector3) Max velocity vector (max velocity in each direction)
     */
-    private Vector3 getMaxPlayerVelocity() {
-
-        // Unity built in way to get vector for mouse position
-        Vector3 current_mouse_pos = Input.mousePosition;
-
-        // The players max speed IGNORES DIRECTION
-        // Need to scalar multiply to get directional velocity
-        Vector3 max_velocity = new Vector3(current_mouse_pos.x * m_max_player_speed,
-                                                current_mouse_pos.y * m_max_player_speed, 0);
-
-            return max_velocity;
-    }
+    // private Vector3 getMaxPlayerVelocity() {
+    //
+    //     // Unity built in way to get vector for mouse position
+    //     Vector3 current_mouse_pos = Input.mousePosition;
+    //
+    //     // The players max speed IGNORES DIRECTION
+    //     // Need to scalar multiply to get directional velocity
+    //     Vector3 max_velocity = new Vector3(current_mouse_pos.x * m_max_player_speed,
+    //                                             current_mouse_pos.y * m_max_player_speed, 0);
+    //
+    //         return max_velocity;
+    // }
 
     /*
     * @Brief: Uses the current mouse position to set the new player direction
     *
     * @NOTE: Only called when the player clicks to change/update direction
+    * @NOTE: Modifies movement direction
     *
     * @Return: N/A
     */
     private void updateDirection() {
 
+        m_movement_direction = Vector3.Normalize(VectorMath.getMouseCoord());
+        Debug.Log("New direction vec3: " + VectorMath.printVector3(m_movement_direction));
 
+
+    }
+
+    /*
+    * @Brief: The maximum velocity vector for player movement currently
+    *
+    * @NOTE: Only called when the player clicks to change/update direction
+    * @NOTE: Modifies movement direction
+    * @NOTE: Modifies max velocity
+    *
+    * @Return: N/A
+    */
+    private void updatePlayerMaxVelocity() {
+
+        m_current_max_velocity = VectorMath.vector3ScalarMultiply(m_movement_direction, m_max_player_speed);
+
+        Debug.Log("New direction vec3: " + VectorMath.printVector3(m_current_max_velocity));
     }
 
     /*
@@ -125,6 +160,32 @@ public class PlayerActions : MonoBehaviour
     */
     private void updatePlayerVelocity() {
 
+        float current_velocity_x = VectorMath.multFloatWithLimit(
+                                    m_movement_direction.x,
+                                    m_player_acceleration,
+                                    m_current_max_velocity.x
+                );
+        float current_velocity_y = VectorMath.multFloatWithLimit(
+                                    m_movement_direction.y,
+                                    m_player_acceleration,
+                                    m_current_max_velocity.y
+                );
+
+
+        m_current_velocity = new Vector2(current_velocity_x,
+                                        current_velocity_y
+                                        );
+
+            m_player_body.linearVelocity = m_current_velocity;
+
+
+    }
+
+    private void triggerPlayerMove(InputAction.CallbackContext obj) {
+
+        updateDirection();
+
+        updatePlayerMaxVelocity();
 
     }
 
@@ -180,6 +241,9 @@ public class PlayerActions : MonoBehaviour
 
     }
 
+    public void triggerDamage() {
+        // triggerIFrames(m_iframe_duration_sec, 0.8f, 3);
+    }
 
     // === END: Custom Methods ===
 

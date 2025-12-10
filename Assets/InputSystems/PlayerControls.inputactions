@@ -91,6 +91,28 @@
                     "action": "MoveConfirm",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8bb4b1f5-7dcb-467a-8045-98b811849c29",
+                    "path": "<VirtualMouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "210987bf-71c2-472d-a6ef-02c281b2627a",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

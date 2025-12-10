@@ -208,4 +208,28 @@ public class VectorMath : MonoBehaviour
 
     }
 
+    /*
+    * @Brief: Multiply two floats with a limit on maximum possible result
+    *
+    * - Multiplies two numbers
+    * - If sum exceeds the limit we reduce back to limit
+    *
+    * @Arg: num_a => First number to be multiplied
+    * @Arg: num_b => Second number to be multiplied
+    * @Arg: limit => Max product we allow (resuce to limit if product esceeds it)
+    *
+    * @Return: Number after adding and adjusting for limit
+    */
+    static public float multFloatWithLimit(float num_a, float num_b, float limit) {
+
+        float result_num = num_a * num_b;
+
+        if (result_num > limit) {
+            result_num = limit;
+        }
+
+        return result_num;
+
+    }
+
 }

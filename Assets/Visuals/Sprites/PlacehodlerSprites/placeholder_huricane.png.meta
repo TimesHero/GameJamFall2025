@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: 0753bf9f3d3a03be09315259c1c63eda
+guid: 293904b4ad5c6f92582482d124c41199
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7161731955044911667
-    second: placeholder_home_0
+      213: -4260895432378628638
+    second: placeholder_huricane_0
+  - first:
+      213: 7153192368043801092
+    second: placeholder_huricane_1
+  - first:
+      213: 7817181246427165453
+    second: placeholder_huricane_2
+  - first:
+      213: -4982680544305004323
+    second: placeholder_huricane_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +105,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: placeholder_home_0
+      name: placeholder_huricane_0
       rect:
         serializedVersion: 2
-        x: 27
-        y: 65
-        width: 427
-        height: 418
+        x: 0
+        y: 13
+        width: 605
+        height: 395
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +137,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dc5fbfa3bba6c9c90800000000000000
-      internalID: -7161731955044911667
+      spriteID: 2e5ccffed224ed4c0800000000000000
+      internalID: -4260895432378628638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: placeholder_huricane_1
+      rect:
+        serializedVersion: 2
+        x: 596
+        y: 392
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40a394b3f8e354360800000000000000
+      internalID: 7153192368043801092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: placeholder_huricane_2
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 0
+        width: 61
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d03f22a2de43c7c60800000000000000
+      internalID: 7817181246427165453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: placeholder_huricane_3
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 0
+        width: 27
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd0437fb176f9dab0800000000000000
+      internalID: -4982680544305004323
       vertices: []
       indices: 
       edges: []
@@ -135,7 +223,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      placeholder_home_0: -7161731955044911667
+      placeholder_huricane_0: -4260895432378628638
+      placeholder_huricane_1: 7153192368043801092
+      placeholder_huricane_2: 7817181246427165453
+      placeholder_huricane_3: -4982680544305004323
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

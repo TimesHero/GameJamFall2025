@@ -10,7 +10,7 @@ public class ConsumableObjectHandler : MonoBehaviour
         // determine value and assign to the object
         m_obstacle_type = 1;
     }
-
+    // arbitrary comment for testing purposes
     void OnTriggerEnter2D(Collider2D collision)
     {
         // if val < tornado_val or if val <= tornado_val

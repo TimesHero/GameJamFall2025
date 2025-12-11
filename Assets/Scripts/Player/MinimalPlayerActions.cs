@@ -1,3 +1,39 @@
+/*
+ * Project: Game Jam Fall 2025
+ * File:    PlayerActions
+ * Description: Sets up player behaviour and controls (+ behaviour methods)
+ *
+ * Author:  Lirael "El" Khan
+ * Student Number: 301511913
+ * Created: 2025-12-09
+ *
+ * Index:
+ *  - Attributes
+ *  - Unity Methods
+ *      - OnEnable: Set up input event triggers
+ *      - OnEnable: Remove input event triggers
+ *      - Start: Set up player object variables
+ *      - Update: Manage movement and size changes
+ *  - Custom Methods
+ *      - triggerMove: Handles mouse click input event for movement
+ *      - updateCurrentDirection: Updates normalized direction vector based on mouse position
+ *      - updateVelocity: update velocity (accounting for acceleration and max velocity)
+ *      - updateMaxVelocity: Set max velocity player can reach
+ *      - setPlayerSize:Set player sprite and collider size
+ *      - increasePlayerSize:Increase player sprite and collider size
+ *      - decreasePlayerSize: Decrease player sprite and collider size
+ *      - addDamage: Collides with an item and loses size
+ *      - consumeItem: Consumes the collided item and gains size
+ *      - triggerIFrames: Activates iframes for fixed period with fixes flashing
+ *
+ * Class:
+ *  - Handles movement of player
+ *  - Handles size increase/decrease of player
+ *  - Handles player changes on special collisions
+ *  - Handles player damage reactions
+ *
+ */
+
 using System;
 using System.Collections;
 using UnityEngine;
@@ -214,6 +250,19 @@ public class MinimalPlayerActions : MonoBehaviour
         Vector3 size_decrease = new Vector3(decrease_amount, decrease_amount, 0);
         m_player_object.transform.localScale += size_decrease;
         Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
+
+    }
+
+    public void addDamage(EnvironmentObstable obstacle) {
+
+        float damage_value = obstacle.GetComponent<>();
+        decreasePlayerSize(damage_value);
+
+    }
+
+    public void consumeItem(EnvironmentObstable obstacle) {
+
+        increasePlayerSize()
 
     }
 

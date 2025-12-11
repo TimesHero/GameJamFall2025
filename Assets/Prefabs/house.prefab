@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2808902294562426831}
   - component: {fileID: 187115523558056517}
   - component: {fileID: 3956904312167058596}
-  - component: {fileID: 2600037645126999867}
+  - component: {fileID: 1127201356476457271}
   m_Layer: 0
   m_Name: house
   m_TagString: Untagged
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -7229086047103362753, guid: 87d616524a7620547b658777c8dfbd23, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -105,9 +105,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 395bfa6863774d84cbd588fa52453efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableObjectHandler
+  m_val: 5
   m_obstacle_type: 4
---- !u!58 &2600037645126999867
-CircleCollider2D:
+--- !u!61 &1127201356476457271
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -136,9 +137,19 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 1.495
+  m_Offset: {x: 0.010895848, y: -0.14171636}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.99, y: 2.77}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 2.8748457, y: 2.4865673}
+  m_EdgeRadius: 0

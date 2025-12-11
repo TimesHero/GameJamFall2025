@@ -56,9 +56,13 @@ public class MinimalPlayerActions : MonoBehaviour
     // The max speed of the player IGNORING DIRECTION!
     // Used to calculate the max velocity in each direction the player can have
     [SerializeField] private float m_max_speed = 0f;
+    [SerializeField] private float m_max_speed_upper_bound = 0f;
+    [SerializeField] private float m_max_speed_lower_bound = 0f;
     // The player accelerates a certain amount each fram
     // until it reaches max_velocity in that axis direction
     [SerializeField] private float m_acceleration = 0f;
+    [SerializeField] private float m_max_acceleration = 0f;
+    [SerializeField] private float m_min_acceleration = 0f;
     // The current velocity is tracked and modified by acceleration/direction changes
     private Vector2 m_current_velocity;
     // The current velocity is limited by max velocity
@@ -70,6 +74,8 @@ public class MinimalPlayerActions : MonoBehaviour
     // ATTRIBUTES: SIZE
 
     // The player is constantly shrinking to encourage them to hunt obstacles
+    [SerializeField] private float m_max_decay_rate = 0f;
+    [SerializeField] private float m_min_decay_rate = 0f;
     [SerializeField] private float m_size_decay_rate = 0f;
     [SerializeField] private float m_loss_size = 0f;
 
@@ -91,9 +97,20 @@ public class MinimalPlayerActions : MonoBehaviour
     void Start() {
 
         // Set default values for the player movement if not set appropriately (i.e. if zero or below)
-        m_max_speed = 5f;
+        if (m_max_speed <= 0f) { m_max_speed = 5f; }
+        if (m_max_speed_upper_bound <= 0f) { m_max_speed_upper_bound = 6f; }
+        if (m_max_speed_lower_bound <= 0f) { m_max_speed_upper_bound = 3f; }
+
+
         m_acceleration = setDefaultValuePerSecond(m_acceleration, 2f);
+        m_max_acceleration = setDefaultValuePerSecond(m_max_acceleration, 6f);
+        m_min_acceleration = setDefaultValuePerSecond(m_max_acceleration, 2f);
+
         m_size_decay_rate = setDefaultValuePerSecond(m_size_decay_rate, 0.1f);
+        m_max_decay_rate = setDefaultValuePerSecond(m_max_decay_rate, 2f);
+        m_min_decay_rate = setDefaultValuePerSecond(m_min_decay_rate, 0.1f);
+
+
         if (m_loss_size <= 0f) { m_loss_size = 0.4f; }
 
         m_current_direction = new Vector2(0, 0);
@@ -326,6 +343,21 @@ public class MinimalPlayerActions : MonoBehaviour
     //
     // }
 
+    private void isDamageState(bool new_state) {
+
+        if (new_state == true) {
+
+            m_player_sprite.color = new Color(0.8f, 0, 0, 1f);
+
+        }
+        else {
+
+            m_player_sprite.color = Color.white;
+
+        }
+
+    }
+
     /*
     * @Brief: Activates iframes for specified duration then deactivates
     *
@@ -439,6 +471,41 @@ public class MinimalPlayerActions : MonoBehaviour
         if (m_player_object.transform.localScale.x <= limit) {
             m_player_object.transform.localScale = new Vector3(limit, limit, m_player_object.transform.localScale.z);
         }
+    }
+
+    float limitInBounds(float current_value, float lower_limit, float upper_limit) {
+
+        float result_value = current_value;
+
+
+        if (current_value < lower_limit) {
+            result_value = lower_limit;
+        }
+
+        if (current_value >= upper_limit) {
+            result_value = upper_limit;
+        }
+
+        return result_value;
+
+    }
+
+    void limitDecayRate() {
+
+        m_size_decay_rate = limitInBounds(m_size_decay_rate, m_min_decay_rate, m_max_decay_rate);
+
+    }
+
+    void limitMaxSpeed() {
+
+        m_max_speed = limitInBounds(m_max_speed, m_max_speed_lower_bound, m_max_speed_upper_bound);
+
+    }
+
+    void limitAcceleration() {
+
+        m_max_speed = limitInBounds(m_acceleration, m_min_acceleration, m_max_acceleration);
+
     }
 
 }

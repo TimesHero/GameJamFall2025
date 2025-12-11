@@ -79,6 +79,8 @@ public class MinimalPlayerActions : MonoBehaviour
     [SerializeField] private float m_size_decay_rate = 0f;
     [SerializeField] private float m_loss_size = 0f;
 
+    private float m_current_power;
+
     // ATTRIBUTES: INPUTS
     [SerializeField] private InputActionReference m_move_confirm;
 
@@ -110,6 +112,7 @@ public class MinimalPlayerActions : MonoBehaviour
         m_max_decay_rate = setDefaultValuePerSecond(m_max_decay_rate, 2f);
         m_min_decay_rate = setDefaultValuePerSecond(m_min_decay_rate, 0.1f);
 
+        m_current_power = 100;
 
         if (m_loss_size <= 0f) { m_loss_size = 0.4f; }
 
@@ -132,7 +135,9 @@ public class MinimalPlayerActions : MonoBehaviour
         updateVelocity();
         m_player_body.linearVelocity = m_current_velocity;
         decayPlayerSize();
+        m_current_power = convertScaleToPower();
         Debug.Log("New Player Scale: " + VectorMath.printVector3(m_player_object.transform.localScale));
+        Debug.Log("New Player Power: " + m_current_power);
 
         // increasePlayerSize(0.01f);
     }
@@ -140,16 +145,24 @@ public class MinimalPlayerActions : MonoBehaviour
     void OnCollisionEnter2D(Collision2D obstacle) {
         m_max_velocity = new Vector2(0, 0);
         if (obstacle.gameObject.tag == "Obstacle") {
-            m_acceleration = -(m_acceleration);
-            limitVelocity(m_max_velocity);
+            if ( obstacle.gameObject.GetComponent<ObstacleManager>().getWeight() > m_current_power ) {
+                isDamageState(true);
+                m_acceleration = -(m_acceleration/4);
+                limitVelocity(m_max_velocity);
+                m_size_decay_rate *= 1.5f;
+            }
         }
     }
 
     void OnCollisionExit2D(Collision2D obstacle) {
         m_max_velocity = new Vector2(0, 0);
         if (obstacle.gameObject.tag == "Obstacle") {
-            m_acceleration = -(m_acceleration);
-            limitVelocity(m_max_velocity);
+            if ( obstacle.gameObject.GetComponent<ObstacleManager>().getWeight() > m_current_power ) {
+                isDamageState(false);
+                m_acceleration = -(m_acceleration*4);
+                limitVelocity(m_max_velocity);
+                m_size_decay_rate = (m_size_decay_rate / 1.5f);
+            }
         }
 
     }
@@ -330,18 +343,13 @@ public class MinimalPlayerActions : MonoBehaviour
 
     }
 
-    // public void addDamage(EnvironmentObstable obstacle) {
-    //
-    //     float damage_value = obstacle.GetComponent<>();
-    //     decreasePlayerSize(damage_value);
-    //
-    // }
-    //
-    // public void consumeItem(EnvironmentObstable obstacle) {
-    //
-    //     increasePlayerSize();
-    //
-    // }
+    public void consumeItem(Collider2D obstacle) {
+        m_current_power += obstacle.gameObject.GetComponent<ObstacleManager>().getFillValue();
+        increasePlayerSize(convertPowerToScale());
+        // obstacle.gameObject.GetComponent<Transform>().position = ;
+
+
+    }
 
     private void isDamageState(bool new_state) {
 
@@ -460,11 +468,11 @@ public class MinimalPlayerActions : MonoBehaviour
     }
 
     void increaseDecayRate(float decay_inc_value) {
-        m_size_decay_rate += decay_inc_value;
+        m_size_decay_rate += setValuePerSecond(decay_inc_value);
     }
 
     void decreaseDecayRate(float decay_dec_value) {
-        m_size_decay_rate -= decay_dec_value;
+        m_size_decay_rate -= setValuePerSecond(decay_dec_value);
     }
 
     void limitSize(float limit) {
@@ -505,6 +513,22 @@ public class MinimalPlayerActions : MonoBehaviour
     void limitAcceleration() {
 
         m_max_speed = limitInBounds(m_acceleration, m_min_acceleration, m_max_acceleration);
+
+    }
+
+    // void setNewPowerDecayRate() {
+    //      m_power_decay_rate = ( (m_player_body.transform.localScale.x - m_loss_size) / m_size_decay_rate );
+    // }
+
+    float convertScaleToPower() {
+
+        return ( ( m_player_object.transform.localScale.x - m_loss_size ) * 100 );
+
+    }
+
+    float convertPowerToScale() {
+
+        return ((m_current_power / 100) + m_loss_size);
 
     }
 

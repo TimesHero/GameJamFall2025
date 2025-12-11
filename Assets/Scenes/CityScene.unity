@@ -339,34 +339,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraPlayerTracker
   player: {fileID: 1359510066}
---- !u!114 &934603096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: player_movement/MoveConfirm
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
-  m_Asset: {fileID: -944628639613478452, guid: 32fcbb12f115b730eaa4b795780dd679, type: 3}
-  m_ActionId: ddfe2bef-9fc9-4750-802b-70fc26fca429
---- !u!114 &1251835373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: player_movement/MoveConfirm
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
-  m_Asset: {fileID: -944628639613478452, guid: 32fcbb12f115b730eaa4b795780dd679, type: 3}
-  m_ActionId: ddfe2bef-9fc9-4750-802b-70fc26fca429
 --- !u!1 &1359510061
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,7 +351,6 @@ GameObject:
   - component: {fileID: 1359510065}
   - component: {fileID: 1359510064}
   - component: {fileID: 1359510063}
-  - component: {fileID: 1359510062}
   - component: {fileID: 1359510067}
   - component: {fileID: 1359510068}
   m_Layer: 0
@@ -389,23 +360,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1359510062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359510061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02e15b1127dca70b8b6580f382f3418b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MinimalPlayerActions
-  m_main_camera: {fileID: 519420031}
-  m_player_object: {fileID: 1359510061}
-  m_max_speed: 3
-  m_acceleration: 0.5
-  m_move_confirm: {fileID: 934603096}
 --- !u!50 &1359510063
 Rigidbody2D:
   serializedVersion: 5
@@ -589,16 +543,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1359510061}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48a3273f9bb39d7d189299feef2dae46, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerActions
+  m_EditorClassIdentifier: Assembly-CSharp::MinimalPlayerActions
+  m_main_camera: {fileID: 519420031}
   m_player_object: {fileID: 1359510061}
-  m_max_player_speed: 3
-  m_player_acceleration: 0.2
-  m_move_confirm: {fileID: 1251835373}
-  m_iframe_duration_sec: 3
+  m_max_speed: 0
+  m_acceleration: 0
+  m_move_confirm: {fileID: 1977983992}
 --- !u!1001 &1451702993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -814,6 +768,20 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12cda791557ed9ddeb8e1bb780593d74, type: 3}
+--- !u!114 &1977983992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: player_movement/MoveConfirm
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: 32fcbb12f115b730eaa4b795780dd679, type: 3}
+  m_ActionId: ddfe2bef-9fc9-4750-802b-70fc26fca429
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

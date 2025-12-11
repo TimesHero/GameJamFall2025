@@ -9,13 +9,28 @@
  *
  * Index:
  *  - Attributes
- *      - player entity
- *      - movement
- *      - input references
  *  - Unity Methods
+ *      - OnEnable: Set up input event triggers
+ *      - OnEnable: Remove input event triggers
  *      - Start: Set up player object variables
+ *      - Update: Manage movement and size changes
  *  - Custom Methods
+ *      - triggerMove: Handles mouse click input event for movement
+ *      - updateCurrentDirection: Updates normalized direction vector based on mouse position
+ *      - updateVelocity: update velocity (accounting for acceleration and max velocity)
+ *      - updateMaxVelocity: Set max velocity player can reach
+ *      - setPlayerSize:Set player sprite and collider size
+ *      - increasePlayerSize:Increase player sprite and collider size
+ *      - decreasePlayerSize: Decrease player sprite and collider size
+ *      - addDamage: Collides with an item and loses size
+ *      - consumeItem: Consumes the collided item and gains size
+ *      - triggerIFrames: Activates iframes for fixed period with fixes flashing
  *
+ * Class:
+ *  - Handles movement of player
+ *  - Handles size increase/decrease of player
+ *  - Handles player changes on special collisions
+ *  - Handles player damage reactions
  *
  */
 
@@ -24,170 +39,232 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerActions : MonoBehaviour
+public class MinimalPlayerActions : MonoBehaviour
 {
 
-    // === START: Attributes ===
+    [SerializeField] private Camera m_main_camera;
 
     // Attributes: Player Entity
     [SerializeField] private GameObject m_player_object;
     private Rigidbody2D m_player_body;
+    private CircleCollider2D m_player_collider;
     private SpriteRenderer m_player_sprite;
 
     // Attributes: Movement Settings and variables
-    // The max speed of the player IGNORING DIRECTION!
-    [SerializeField] private float m_max_player_speed = 5f;
-    // Current and Max Velocities account for direction
-    // These are tracked to manage player acceleration and movement changes
-    private Vector3 m_current_max_velocity = new Vector3(0f, 0f, 0f);
-    private Vector2 m_current_velocity = new Vector2(0f, 0f);
-    [SerializeField] private float m_player_acceleration = 1f;
-    private Vector3 m_movement_direction = new Vector3(0f, 0f, 0f);
 
-    // Attributes: Control Schemes
+    // The max speed of the player IGNORING DIRECTION!
+    // Used to calculate the max velocity in each direction the player can have
+    [SerializeField] private float m_max_speed = 0f;
+    // The player accelerates a certain amount each fram
+    // until it reaches max_velocity in that axis direction
+    [SerializeField] private float m_acceleration = 0f;
+    // The current velocity is tracked and modified by acceleration/direction changes
+    private Vector2 m_current_velocity;
+    // The current velocity is limited by max velocity
+    // The max velocity is dictated by current travel direction and max speed
+    private Vector2 m_max_velocity;
+    // Evaluating mouse position for direction gives a Vector3 to be handled
+    private Vector2 m_current_direction;
+
+    // Attributes: Inputs
     [SerializeField] private InputActionReference m_move_confirm;
 
-    // Attributes: Damage Management
-    [SerializeField] private int m_iframe_duration_sec = 3;
-
-    // === END: Attributes ===
-
-    // -------------------------------------------------------------
-
-    // === START: Unity Methods ===
-
+    // We want to set up event listeners whenever the object is active
     void OnEnable() {
-
-        m_move_confirm.action.started += triggerPlayerMove;
-
+        m_move_confirm.action.started += triggerMove;
     }
 
+    // We disable event triggers when object is disabled
+    // This prevents double triggers when the object is enabled again
     void OnDisable() {
-
-        m_move_confirm.action.started -= triggerPlayerMove;
-
+        m_move_confirm.action.started -= triggerMove;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    // Key attributes are initialized or corrected
+    void Start() {
 
-        // Setup player components using the player game object
+        // Set default values for the player movement if not set appropriately (i.e. if zero or below)
+        if (m_max_speed <= 0f) { m_max_speed = 3f; }
+        if (m_acceleration <= 0f) { m_acceleration = 0.4f; }
+        m_current_direction = new Vector2(0, 0);
+        m_current_velocity = new Vector2(0, 0);
+
+        //Obtain essential components for player
         m_player_body = m_player_object.GetComponent<Rigidbody2D>();
+        m_player_collider = m_player_object.GetComponent<CircleCollider2D>();
         m_player_sprite = m_player_object.GetComponent<SpriteRenderer>();
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-        updatePlayerVelocity();
 
     }
 
-    // === END: Unity Methods ===
+    // Every frame we want to:
+    // Adjust velocity for direction change and acceleration
+    // Update the force moving the player
+    void Update() {
 
-    // -------------------------------------------------------------
+        updateVelocity();
+        m_player_body.linearVelocity = m_current_velocity;
 
-    // === START: Custom Methods ===
-
-    // === START: Getter/Setter Methods ===
-
-    // === END: Getter/Setter Methods ===
+        // increasePlayerSize(0.01f);
+    }
 
     /*
-    * @Brief: Gets a vector of the max player velocity
+    * @Brief: Handles modifying movement on move confirm imput with mouse
     *
-    * - Uses build in Unity attribute to get mouse position
-    * - The final vector must reflect the speed in both x and y directions
+    * - updates direction
+    * - updates max velocity
     *
-    * @Return: (Vector3) Max velocity vector (max velocity in each direction)
+    * @Arg: obj => The input object that calls this function
+    *
+    * @Return: N/A
     */
-    // private Vector3 getMaxPlayerVelocity() {
+    private void triggerMove(InputAction.CallbackContext obj) {
+
+        Debug.Log("recieved click");
+
+        updateCurrentDirection();
+
+        updateMaxVelocity();
+
+
+    }
+
+    /*
+    * @Brief: Update the player direction vector (NORMALIZED)
+    *
+    * - Updates the player direction based on mouse position relative to player position
+    *
+    * @Return: N/A
+    */
+    private void updateCurrentDirection() {
+
+        Vector3 current_mouse_pos = m_main_camera.ScreenToWorldPoint(VectorMath.getMousePos());
+
+        m_current_direction = VectorMath.getDifferenceVector3(current_mouse_pos, transform.position);
+        m_current_direction.Normalize();
+        // m_current_direction = m_current_direction.Normalize();
+
+
+        // Debug.Log("Current Direction on Click: " + VectorMath.printVector2(m_current_direction));
+
+    }
+
+    /*
+    * @Brief: Handles player speed every frame accounting for acceleration and max velocity
+    *
+    * - It accounts for when the player is moving in negative/positive coordinate directions
+    *
+    * @Return: N/A
+    */
+    private void updateVelocity() {
+
+        // The amount of change in velocity in each coordinate direction
+        // Used to decide positiove/negative acceleration and max velocity as well
+        float delta_x = m_current_direction.x * m_acceleration;
+        float delta_y = m_current_direction.y * m_acceleration;
+
+        m_current_velocity.x += delta_x;
+        m_current_velocity.y += delta_y;
+
+        // We must LIMIT the velocity in both axis directions by max velocity in each axis
+        // Max velocity can be positive ("north"/"east" movement)
+        // Max velocity can be negative ("south"/"west" movement)
+        // Velocity in each axis direction is handled seperately (x and y axes, no z axis)
+
+        // If we are accelerating negatively we are capping when we got BELOW negative max speed coord in that axis
+        // If we are accelerating positively we are capping when we got ABOVE positive max speed coord in that axis
+        // Do this for both x and y axis velocity measurements
+        if (delta_x < 0) {
+            if (m_current_velocity.x < m_max_velocity.x) { m_current_velocity.x = m_max_velocity.x; }
+        }
+        else if (delta_x > 0) {
+
+            if (m_current_velocity.x > m_max_velocity.x) { m_current_velocity.x = m_max_velocity.x; }
+        }
+
+        if (delta_y < 0) {
+            if (m_current_velocity.y < m_max_velocity.y) { m_current_velocity.y = m_max_velocity.y; }
+        }
+        else if (delta_y > 0) {
+
+            if (m_current_velocity.y > m_max_velocity.y) { m_current_velocity.y = m_max_velocity.y; }
+        }
+
+    }
+
+    /*
+    * @Brief: Handles the max velocity vector for the player
+    *
+    * - The max velocity vector is used to limit the player velocity
+    * - This prevents infinite acceleration in a direction
+    * - The max velocity accounts for positive and negative directions
+    *
+    * @Return: N/A
+    */
+    private void updateMaxVelocity() {
+
+        m_max_velocity.x = m_current_direction.x * m_max_speed;
+        m_max_velocity.y = m_current_direction.y * m_max_speed;
+
+    }
+
+    /*
+    * @Brief: Set player sprite and collider size
+    *
+    * @Arg: new_size => Contains new width (x value) and height (y value) for the player
+    */
+    private void setPlayerSize(Vector3 new_size) {
+
+        m_player_object.transform.localScale += new_size;
+
+    }
+
+    /*
+    * @Brief: Increase player sprite and collider size by fixed amount
+    *
+    * - We want to keep the player "square shaped" so we only use a single float
+    * - The float makes an equal width and height increase
+    *
+    * @Arg: increase_amount => The scalar value to increase width and height by
+    */
+    private void increasePlayerSize(float increase_amount) {
+
+        // transform.localScale needs a vector so we make a vector using increase amount
+        Vector3 size_increase = new Vector3(increase_amount, increase_amount, 0);
+        m_player_object.transform.localScale += size_increase;
+        Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
+
+    }
+
+    /*
+    * @Brief: Decrease player sprite and collider size by fixed amount
+    *
+    * - We want to keep the player "square shaped" so we only use a single float
+    * - The float makes an equal width and height decrease
+    *
+    * @Arg: increase_amount => The scalar value to decrease width and height by
+    */
+    private void decreasePlayerSize(float decrease_amount) {
+
+        // transform.localScale needs a vector so we make a vector using decrease amount
+        Vector3 size_decrease = new Vector3(decrease_amount, decrease_amount, 0);
+        m_player_object.transform.localScale += size_decrease;
+        Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
+
+    }
+
+    // public void addDamage(EnvironmentObstable obstacle) {
     //
-    //     // Unity built in way to get vector for mouse position
-    //     Vector3 current_mouse_pos = Mouse.current.position.ReadValue();
+    //     float damage_value = obstacle.GetComponent<>();
+    //     decreasePlayerSize(damage_value);
     //
-    //     // The players max speed IGNORES DIRECTION
-    //     // Need to scalar multiply to get directional velocity
-    //     Vector3 max_velocity = new Vector3(current_mouse_pos.x * m_max_player_speed,
-    //                                             current_mouse_pos.y * m_max_player_speed, 0);
-    //
-    //         return max_velocity;
     // }
-
-    /*
-    * @Brief: Uses the current mouse position to set the new player direction
-    *
-    * @NOTE: Only called when the player clicks to change/update direction
-    * @NOTE: Modifies movement direction
-    *
-    * @Return: N/A
-    */
-    private void updateDirection() {
-
-        // m_movement_direction = Vector3.Normalize(VectorMath.getMouseCoord());
-        Debug.Log("New direction vec3: " + VectorMath.printVector3(m_movement_direction));
-
-
-    }
-
-    /*
-    * @Brief: The maximum velocity vector for player movement currently
-    *
-    * @NOTE: Only called when the player clicks to change/update direction
-    * @NOTE: Modifies movement direction
-    * @NOTE: Modifies max velocity
-    *
-    * @Return: N/A
-    */
-    private void updatePlayerMaxVelocity() {
-
-        m_current_max_velocity = VectorMath.vector3ScalarMultiply(m_movement_direction, m_max_player_speed);
-
-        Debug.Log("New direction vec3: " + VectorMath.printVector3(m_current_max_velocity));
-    }
-
-    /*
-    * @Brief: Updates the velocity (current speed and direction) of the player
-    *
-    * - Uses mouse position to set direction
-    * - Sets velocity
-    * - ramps velocity until max player speed reached reached or direction changed
-    *
-    * @Return: N/A
-    */
-    private void updatePlayerVelocity() {
-
-        float current_velocity_x = VectorMath.multFloatWithLimit(
-                                    m_movement_direction.x,
-                                    m_player_acceleration,
-                                    m_current_max_velocity.x
-                );
-        float current_velocity_y = VectorMath.multFloatWithLimit(
-                                    m_movement_direction.y,
-                                    m_player_acceleration,
-                                    m_current_max_velocity.y
-                );
-
-
-        m_current_velocity = new Vector2(current_velocity_x,
-                                        current_velocity_y
-                                        );
-
-            m_player_body.linearVelocity = m_current_velocity;
-
-
-    }
-
-    private void triggerPlayerMove(InputAction.CallbackContext obj) {
-
-        updateDirection();
-
-        updatePlayerMaxVelocity();
-
-    }
+    //
+    // public void consumeItem(EnvironmentObstable obstacle) {
+    //
+    //     increasePlayerSize();
+    //
+    // }
 
     /*
     * @Brief: Activates iframes for specified duration then deactivates
@@ -240,11 +317,5 @@ public class PlayerActions : MonoBehaviour
         Physics2D.IgnoreLayerCollision(player_layer, enemy_layer, false);
 
     }
-
-    public void triggerDamage() {
-        // triggerIFrames(m_iframe_duration_sec, 0.8f, 3);
-    }
-
-    // === END: Custom Methods ===
 
 }

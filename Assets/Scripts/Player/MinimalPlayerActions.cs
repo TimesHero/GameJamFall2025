@@ -16,13 +16,14 @@ public class MinimalPlayerActions : MonoBehaviour
 
     // Attributes: Movement Settings and variables
     // The max speed of the player IGNORING DIRECTION!
-    [SerializeField] private float m_max_speed = 5f;
-    [SerializeField] private float m_acceleration = 1f;
+    [SerializeField] private float m_max_speed = 10000f;
+    private float m_current_speed = 0f;
+    [SerializeField] private float m_acceleration = 0.5f;
     private Vector2 m_current_velocity;
-    // Direction (Uses m_currrent_direction)
+    // Direction (Uses m_current_direction)
     private Vector2 m_max_velocity;
     // Evaluating mouse position for direction gives a Vector3 to be handled
-    private Vector3 m_current_direction = new Vector3(0, 0, 0);
+    private Vector2 m_current_direction = new Vector2(0, 0);
 
     // Attributes: Inputs
     [SerializeField] private InputActionReference m_move_confirm;
@@ -46,7 +47,14 @@ public class MinimalPlayerActions : MonoBehaviour
     void Update() {
 
         // transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+        // updateVelocity();
+        // transform.position = Vector3.MoveTowards(transform.position, m_current_direction, m_max_speed * Time.deltaTime);
+
         updateVelocity();
+        m_player_body.linearVelocity = m_current_velocity;
+        // Debug.Log("Current Direction: " + VectorMath.printVector3(m_current_direction));
+        // Debug.Log("Current Position: " + VectorMath.printVector3(transform.position));
+        // Debug.Log("Current Max Velocity: " + VectorMath.printVector3(m_max_velocity));
 
     }
 
@@ -57,34 +65,58 @@ public class MinimalPlayerActions : MonoBehaviour
         updateCurrentDirection();
 
         updateMaxVelocity();
+
+
     }
 
     private void updateCurrentDirection() {
 
-        m_current_direction = m_main_camera.ScreenToWorldPoint(VectorMath.getMousePos());
+        Vector3 current_mouse_pos = m_main_camera.ScreenToWorldPoint(VectorMath.getMousePos());
 
-        Vector3.Normalize(m_current_direction);
+        m_current_direction = new Vector2(current_mouse_pos.x - transform.position.x, current_mouse_pos.y - transform.position.y);
+        m_current_direction.Normalize();
+        // m_current_direction = m_current_direction.Normalize();
 
-        m_current_direction.z = transform.position.z;
 
+        Debug.Log("Current Direction on Click: " + VectorMath.printVector2(m_current_direction));
 
     }
 
     private void updateVelocity() {
 
-        m_current_velocity.x = VectorMath.addFloatWithLimit(
-                                            m_current_direction.x,
-                                            m_current_direction.x * m_acceleration,
-                                            m_max_velocity.x
-                );
+        float delta_x = m_current_direction.x * m_acceleration;
+        float delta_y = m_current_direction.y * m_acceleration;
 
-        m_current_velocity.y = VectorMath.addFloatWithLimit(
-                                            m_current_direction.y,
-                                            m_current_direction.y * m_acceleration,
-                                            m_max_velocity.y
-                );
+        Debug.Log("Delta X: " + delta_x.ToString());
+        Debug.Log("Delta Y: " + delta_y.ToString());
 
-        m_player_body.linearVelocity = m_current_velocity;
+        m_current_velocity.x += delta_x;
+        m_current_velocity.y += delta_y;
+
+        Debug.Log("Velocity X: " + m_current_velocity.x.ToString());
+        Debug.Log("Velocity Y: " + m_current_velocity.y.ToString());
+
+        if (delta_x < 0) {
+            if (m_current_velocity.x < m_max_velocity.x) { m_current_velocity.x = m_max_velocity.x; }
+        }
+        else if (delta_x > 0) {
+
+            if (m_current_velocity.x > m_max_velocity.x) { m_current_velocity.x = m_max_velocity.x; }
+        }
+
+        if (delta_y < 0) {
+            if (m_current_velocity.y < m_max_velocity.y) { m_current_velocity.y = m_max_velocity.y; }
+        }
+        else if (delta_y > 0) {
+
+            if (m_current_velocity.y > m_max_velocity.y) { m_current_velocity.y = m_max_velocity.y; }
+        }
+
+        Debug.Log("Max Velocity X: " + m_max_velocity.x.ToString());
+        Debug.Log("Max Velocity Y: " + m_max_velocity.y.ToString());
+        Debug.Log("Limited Velocity X: " + m_current_velocity.x.ToString());
+        Debug.Log("Limited Velocity Y: " + m_current_velocity.y.ToString());
+        // Debug.Log("Current Velocity: " + VectorMath.printVector3(m_current_velocity));
 
     }
 

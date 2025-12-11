@@ -42,15 +42,16 @@ using UnityEngine.InputSystem;
 public class MinimalPlayerActions : MonoBehaviour
 {
 
+    // Camera needed to generate direction vector
     [SerializeField] private Camera m_main_camera;
 
-    // Attributes: Player Entity
+    // ATTRIBUTES: PLAYER ENTITY
     [SerializeField] private GameObject m_player_object;
     private Rigidbody2D m_player_body;
     private CircleCollider2D m_player_collider;
     private SpriteRenderer m_player_sprite;
 
-    // Attributes: Movement Settings and variables
+    // ATTRIBUTES: MOVEMENT
 
     // The max speed of the player IGNORING DIRECTION!
     // Used to calculate the max velocity in each direction the player can have
@@ -59,14 +60,20 @@ public class MinimalPlayerActions : MonoBehaviour
     // until it reaches max_velocity in that axis direction
     [SerializeField] private float m_acceleration = 0f;
     // The current velocity is tracked and modified by acceleration/direction changes
-    private Vector2 m_current_velocity;
+    private Vector2 m_current_velocity = new Vector2(0, 0);
     // The current velocity is limited by max velocity
     // The max velocity is dictated by current travel direction and max speed
-    private Vector2 m_max_velocity;
+    private Vector2 m_max_velocity = new Vector2(0,0);
     // Evaluating mouse position for direction gives a Vector3 to be handled
-    private Vector2 m_current_direction;
+    private Vector2 m_current_direction = new Vector2(0,0);
 
-    // Attributes: Inputs
+    // ATTRIBUTES: SIZE
+
+    // The player is constantly shrinking to encourage them to hunt obstacles
+    [SerializeField] private float m_size_decay_rate = 0f;
+    [SerializeField] private float m_loss_size = 0f;
+
+    // ATTRIBUTES: INPUTS
     [SerializeField] private InputActionReference m_move_confirm;
 
     // We want to set up event listeners whenever the object is active
@@ -84,8 +91,13 @@ public class MinimalPlayerActions : MonoBehaviour
     void Start() {
 
         // Set default values for the player movement if not set appropriately (i.e. if zero or below)
-        if (m_max_speed <= 0f) { m_max_speed = 3f; }
-        if (m_acceleration <= 0f) { m_acceleration = 0.4f; }
+        if (m_max_speed <= 0f) { m_max_speed = (5f * Time.deltaTime); }
+        else { m_max_speed *= Time.deltaTime; }
+        if (m_acceleration <= 0f) { m_acceleration = (1f * Time.deltaTime); }
+        else { m_size_decay_rate *= Time.deltaTime; }
+        if (m_size_decay_rate <= 0f) { m_size_decay_rate = (0.1f * Time.deltaTime); }
+        else { m_size_decay_rate *= Time.deltaTime; }
+        if (m_loss_size <= 0f) { m_loss_size = 0.4f; }
         m_current_direction = new Vector2(0, 0);
         m_current_velocity = new Vector2(0, 0);
 
@@ -104,23 +116,27 @@ public class MinimalPlayerActions : MonoBehaviour
 
         updateVelocity();
         m_player_body.linearVelocity = m_current_velocity;
+        decayPlayerSize();
+        Debug.Log("New Player Scale: " + VectorMath.printVector3(m_player_object.transform.localScale));
 
         // increasePlayerSize(0.01f);
     }
 
-    void OnCollisionEnter(Collision obstacle) {
+    void OnCollisionEnter2D(Collision2D obstacle) {
+        m_max_velocity = new Vector2(0, 0);
         if (obstacle.gameObject.tag == "Obstacle") {
             m_acceleration = -(m_acceleration);
-            if ((m_current_direction.x < 0) && (m_current_velocity.x > 0)) {
-                m_current_velocity.x = 0;
-            }
-            if (m_current_direction.x < 0) {
-                if (m_current_velocity.x > 0) { m_current_velocity.x = 0; }
-            }
-            else {
-                if (m_current_velocity.x < 0) { m_current_velocity.x = 0; }
-            }
+            limitVelocity(m_max_velocity);
         }
+    }
+
+    void OnCollisionExit2D(Collision2D obstacle) {
+        m_max_velocity = new Vector2(0, 0);
+        if (obstacle.gameObject.tag == "Obstacle") {
+            m_acceleration = -(m_acceleration);
+            limitVelocity(m_max_velocity);
+        }
+
     }
 
     /*
@@ -250,7 +266,7 @@ public class MinimalPlayerActions : MonoBehaviour
         // transform.localScale needs a vector so we make a vector using increase amount
         Vector3 size_increase = new Vector3(increase_amount, increase_amount, 0);
         m_player_object.transform.localScale += size_increase;
-        Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
+        // Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
 
     }
 
@@ -266,8 +282,25 @@ public class MinimalPlayerActions : MonoBehaviour
 
         // transform.localScale needs a vector so we make a vector using decrease amount
         Vector3 size_decrease = new Vector3(decrease_amount, decrease_amount, 0);
-        m_player_object.transform.localScale += size_decrease;
-        Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
+        m_player_object.transform.localScale -= size_decrease;
+        // Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
+
+    }
+
+    void decayPlayerSize() {
+
+        decreasePlayerSize(m_size_decay_rate);
+        limitSize(m_loss_size);
+        checkForLoss();
+
+
+    }
+
+    void checkForLoss() {
+
+        if (m_player_object.transform.localScale.x <= m_loss_size) {
+            Debug.Log("The tyrany of the storm is vanquished!");
+        }
 
     }
 
@@ -363,6 +396,12 @@ public class MinimalPlayerActions : MonoBehaviour
             if (m_current_velocity.y > limit.y) { m_current_velocity.y = limit.y; }
         }
 
+    }
+
+    void limitSize(float limit) {
+        if (m_player_object.transform.localScale.x <= limit) {
+            m_player_object.transform.localScale = new Vector3(limit, limit, m_player_object.transform.localScale.z);
+        }
     }
 
 }

@@ -423,6 +423,18 @@ public class MinimalPlayerActions : MonoBehaviour
         m_acceleration -= accel_dec_value;
     }
 
+    void setDecayRate(float new_decay_value) {
+        m_size_decay_rate = new_decay_value;
+    }
+
+    void increaseDecayRate(float decay_inc_value) {
+        m_size_decay_rate += decay_inc_value;
+    }
+
+    void decreaseDecayRate(float decay_dec_value) {
+        m_size_decay_rate -= decay_dec_value;
+    }
+
     void limitSize(float limit) {
         if (m_player_object.transform.localScale.x <= limit) {
             m_player_object.transform.localScale = new Vector3(limit, limit, m_player_object.transform.localScale.z);

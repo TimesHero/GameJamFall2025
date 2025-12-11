@@ -217,7 +217,25 @@ public class MinimalPlayerActions : MonoBehaviour
 
     }
 
-
+    /*
+    * @Brief: Activates iframes for specified duration then deactivates
+    *
+    * - Activates iframes (disable collisions with enemies)
+    * - Flash red desired times
+    * - Deactivate iframes
+    * - Uses player and enemy layers to toggle collisions on/off
+    *
+    * @Arg: iframe_duration_sec => Duration to keep iframes active (IN SECONDS)
+    * @Arg: iframe_opacity => The player sprite opacity while iframes are active
+    * @Arg: total_flashes => Times player sprite flashes during iframes
+    * @Arg: player_layer => Layer used for player
+    * @Arg: enemy_layer => Layer used for enemies
+    *
+    * @WARNING: Enemies and Player MUST be on different layers
+    * @WARNING: USES yeild -> WaitForSeconds (Requires subroutine)
+    *
+    * @Return: N/A
+    */
     private IEnumerator triggerIFrames(int iframe_duration_sec = 3,
                                         float iframe_opacity = 0.6f, int total_flashes = 1,
                                         int player_layer = 9, int enemy_layer = 10) {

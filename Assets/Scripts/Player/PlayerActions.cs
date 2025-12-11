@@ -60,12 +60,12 @@ public class MinimalPlayerActions : MonoBehaviour
     // until it reaches max_velocity in that axis direction
     [SerializeField] private float m_acceleration = 0f;
     // The current velocity is tracked and modified by acceleration/direction changes
-    private Vector2 m_current_velocity = new Vector2(0, 0);
+    private Vector2 m_current_velocity;
     // The current velocity is limited by max velocity
     // The max velocity is dictated by current travel direction and max speed
-    private Vector2 m_max_velocity = new Vector2(0,0);
+    private Vector2 m_max_velocity;
     // Evaluating mouse position for direction gives a Vector3 to be handled
-    private Vector2 m_current_direction = new Vector2(0,0);
+    private Vector2 m_current_direction;
 
     // ATTRIBUTES: SIZE
 
@@ -91,13 +91,11 @@ public class MinimalPlayerActions : MonoBehaviour
     void Start() {
 
         // Set default values for the player movement if not set appropriately (i.e. if zero or below)
-        if (m_max_speed <= 0f) { m_max_speed = (5f * Time.deltaTime); }
-        else { m_max_speed *= Time.deltaTime; }
-        if (m_acceleration <= 0f) { m_acceleration = (1f * Time.deltaTime); }
-        else { m_size_decay_rate *= Time.deltaTime; }
-        if (m_size_decay_rate <= 0f) { m_size_decay_rate = (0.1f * Time.deltaTime); }
-        else { m_size_decay_rate *= Time.deltaTime; }
+        m_max_speed = 5f;
+        m_acceleration = setDefaultValuePerSecond(m_acceleration, 2f);
+        m_size_decay_rate = setDefaultValuePerSecond(m_size_decay_rate, 0.1f);
         if (m_loss_size <= 0f) { m_loss_size = 0.4f; }
+
         m_current_direction = new Vector2(0, 0);
         m_current_velocity = new Vector2(0, 0);
 
@@ -137,6 +135,17 @@ public class MinimalPlayerActions : MonoBehaviour
             limitVelocity(m_max_velocity);
         }
 
+    }
+
+    float setDefaultValuePerSecond(float current_value, float default_value) {
+        float new_value;
+        if (current_value <= 0) {
+            new_value = setValuePerSecond(default_value);
+        }
+        else {
+            new_value = setValuePerSecond(current_value);
+        }
+        return new_value;
     }
 
     /*
@@ -396,6 +405,22 @@ public class MinimalPlayerActions : MonoBehaviour
             if (m_current_velocity.y > limit.y) { m_current_velocity.y = limit.y; }
         }
 
+    }
+
+    float setValuePerSecond(float initial_value) {
+        return initial_value * Time.deltaTime;
+    }
+
+    void setAcceleration(float new_accel_value) {
+        m_acceleration = new_accel_value;
+    }
+
+    void increaseAcceleration(float accel_inc_value) {
+        m_acceleration += accel_inc_value;
+    }
+
+    void decreaseAcceleration(float accel_dec_value) {
+        m_acceleration -= accel_dec_value;
     }
 
     void limitSize(float limit) {

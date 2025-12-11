@@ -34,9 +34,9 @@ public class VectorMath : MonoBehaviour
     *
     * @Return: (Vector3) Coordinates of the mouse
     */
-    static public Vector3 getMouseCoord() {
+    static public Vector3 getMousePos() {
 
-        return Input.mousePosition;
+        return Mouse.current.position.ReadValue();
 
     }
 

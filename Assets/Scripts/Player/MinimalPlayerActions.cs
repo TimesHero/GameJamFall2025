@@ -6,26 +6,26 @@ using UnityEngine.InputSystem;
 public class MinimalPlayerActions : MonoBehaviour
 {
 
+    [SerializeField] private Camera m_main_camera;
+
     // Attributes: Player Entity
     [SerializeField] private GameObject m_player_object;
     private Rigidbody2D m_player_body;
+    private Collider m_player_collider;
     private SpriteRenderer m_player_sprite;
 
     // Attributes: Movement Settings and variables
     // The max speed of the player IGNORING DIRECTION!
-    [SerializeField] private float m_max_player_speed = 5f;
-    // Current and Max Velocities account for direction
-    // These are tracked to manage player acceleration and movement changes
-    private Vector3 m_current_max_velocity = new Vector3(0f, 0f, 0f);
-    private Vector2 m_current_velocity = new Vector2(0f, 0f);
-    [SerializeField] private float m_player_acceleration = 1f;
-    private Vector3 m_movement_direction = new Vector3(0f, 0f, 0f);
+    [SerializeField] private float m_max_speed = 5f;
+    [SerializeField] private float m_acceleration = 1f;
+    private Vector2 m_current_velocity;
+    // Direction (Uses m_currrent_direction)
+    private Vector2 m_max_velocity;
+    // Evaluating mouse position for direction gives a Vector3 to be handled
+    private Vector3 m_current_direction = new Vector3(0, 0, 0);
 
-    // Attributes: Control Schemes
+    // Attributes: Inputs
     [SerializeField] private InputActionReference m_move_confirm;
-
-    // Attributes: Damage Management
-    [SerializeField] private int m_iframe_duration_sec = 3;
 
     void OnEnable() {
         m_move_confirm.action.started += triggerMove;
@@ -35,51 +35,65 @@ public class MinimalPlayerActions : MonoBehaviour
         m_move_confirm.action.started -= triggerMove;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        // Setup player components using the player game object
+    void Start() {
+
         m_player_body = m_player_object.GetComponent<Rigidbody2D>();
+        m_player_collider = m_player_object.GetComponent<Collider>();
         m_player_sprite = m_player_object.GetComponent<SpriteRenderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        updateCurrentVelocity();
-    }
-
-    void triggerMove(InputAction.CallbackContext obj) {
-
-        Vector3 mouse_pos = Input.mousePosition;
-        Debug.Log(VectorMath.printVector3(mouse_pos));
-
-        m_movement_direction = Vector3.Normalize(mouse_pos);
-        Debug.Log(VectorMath.printVector3(m_movement_direction));
-
-        m_current_max_velocity = new Vector3(m_movement_direction.x * m_max_player_speed,
-                                m_movement_direction.y * m_max_player_speed,
-                                m_movement_direction.z * m_max_player_speed);
-
-        Debug.Log(VectorMath.printVector3(m_current_max_velocity));
 
     }
-    
-    void updateCurrentVelocity() {
-        float new_velocity_x = m_current_velocity.x + (m_current_max_velocity * m_player_acceleration);
-        float new_velocity_y = m_current_velocity.y + (m_current_max_velocity * m_player_acceleration);
 
-        if (new_velocity_x > m_current_max_velocity.x) {
-            new_velocity_x = m_current_max_velocity.x;
-        }
+    void Update() {
 
-        if (new_velocity_y > m_current_max_velocity.y) {
-            new_velocity_y = m_current_max_velocity.y;
-        }
+        // transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+        updateVelocity();
 
-        m_current_velocity = new Vector3(new_velocity_x, new_velocity_y);
+    }
+
+    private void triggerMove(InputAction.CallbackContext obj) {
+
+        Debug.Log("recieved click");
+
+        updateCurrentDirection();
+
+        updateMaxVelocity();
+    }
+
+    private void updateCurrentDirection() {
+
+        m_current_direction = m_main_camera.ScreenToWorldPoint(VectorMath.getMousePos());
+
+        Vector3.Normalize(m_current_direction);
+
+        m_current_direction.z = transform.position.z;
+
+
+    }
+
+    private void updateVelocity() {
+
+        m_current_velocity.x = VectorMath.addFloatWithLimit(
+                                            m_current_direction.x,
+                                            m_current_direction.x * m_acceleration,
+                                            m_max_velocity.x
+                );
+
+        m_current_velocity.y = VectorMath.addFloatWithLimit(
+                                            m_current_direction.y,
+                                            m_current_direction.y * m_acceleration,
+                                            m_max_velocity.y
+                );
+
         m_player_body.linearVelocity = m_current_velocity;
 
     }
+
+    private void updateMaxVelocity() {
+
+        m_max_velocity.x = m_current_direction.x * m_max_speed;
+        m_max_velocity.y = m_current_direction.y * m_max_speed;
+
+    }
+
 
 }

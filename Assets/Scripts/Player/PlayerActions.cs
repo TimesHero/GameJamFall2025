@@ -107,7 +107,7 @@ public class PlayerActions : MonoBehaviour
     // private Vector3 getMaxPlayerVelocity() {
     //
     //     // Unity built in way to get vector for mouse position
-    //     Vector3 current_mouse_pos = Input.mousePosition;
+    //     Vector3 current_mouse_pos = Mouse.current.position.ReadValue();
     //
     //     // The players max speed IGNORES DIRECTION
     //     // Need to scalar multiply to get directional velocity
@@ -127,7 +127,7 @@ public class PlayerActions : MonoBehaviour
     */
     private void updateDirection() {
 
-        m_movement_direction = Vector3.Normalize(VectorMath.getMouseCoord());
+        // m_movement_direction = Vector3.Normalize(VectorMath.getMouseCoord());
         Debug.Log("New direction vec3: " + VectorMath.printVector3(m_movement_direction));
 
 

@@ -84,7 +84,40 @@
                 {
                     "name": "",
                     "id": "ef37f6dc-dad6-4d2e-b5c2-b46b59304cca",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Mouse>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54ba5b70-68da-4bb6-ad8d-410fa1e9ed95",
+                    "path": "<VirtualMouse>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7d08e725-0b93-437f-97ed-85e725210c89",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "421f31c9-b8be-4b2e-9bec-ae58cfd8c68f",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -99,7 +132,13 @@
         {
             "name": "player_mouse_controls",
             "bindingGroup": "player_mouse_controls",
-            "devices": []
+            "devices": [
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
         }
     ]
 }

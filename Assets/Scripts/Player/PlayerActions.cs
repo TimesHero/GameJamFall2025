@@ -108,6 +108,21 @@ public class MinimalPlayerActions : MonoBehaviour
         // increasePlayerSize(0.01f);
     }
 
+    void OnCollisionEnter(Collision obstacle) {
+        if (obstacle.gameObject.tag == "Obstacle") {
+            m_acceleration = -(m_acceleration);
+            if ((m_current_direction.x < 0) && (m_current_velocity.x > 0)) {
+                m_current_velocity.x = 0;
+            }
+            if (m_current_direction.x < 0) {
+                if (m_current_velocity.x > 0) { m_current_velocity.x = 0; }
+            }
+            else {
+                if (m_current_velocity.x < 0) { m_current_velocity.x = 0; }
+            }
+        }
+    }
+
     /*
     * @Brief: Handles modifying movement on move confirm imput with mouse
     *
@@ -174,21 +189,24 @@ public class MinimalPlayerActions : MonoBehaviour
         // If we are accelerating negatively we are capping when we got BELOW negative max speed coord in that axis
         // If we are accelerating positively we are capping when we got ABOVE positive max speed coord in that axis
         // Do this for both x and y axis velocity measurements
-        if (delta_x < 0) {
-            if (m_current_velocity.x < m_max_velocity.x) { m_current_velocity.x = m_max_velocity.x; }
-        }
-        else if (delta_x > 0) {
+        // if (delta_x < 0) {
+        //     if (m_current_velocity.x < m_max_velocity.x) { m_current_velocity.x = m_max_velocity.x; }
+        // }
+        // else if (delta_x > 0) {
+        //
+        //     if (m_current_velocity.x > m_max_velocity.x) { m_current_velocity.x = m_max_velocity.x; }
+        // }
+        //
+        // if (delta_y < 0) {
+        //     if (m_current_velocity.y < m_max_velocity.y) { m_current_velocity.y = m_max_velocity.y; }
+        // }
+        // else if (delta_y > 0) {
+        //
+        //     if (m_current_velocity.y > m_max_velocity.y) { m_current_velocity.y = m_max_velocity.y; }
+        // }
+        limitVelocity(m_max_velocity);
 
-            if (m_current_velocity.x > m_max_velocity.x) { m_current_velocity.x = m_max_velocity.x; }
-        }
-
-        if (delta_y < 0) {
-            if (m_current_velocity.y < m_max_velocity.y) { m_current_velocity.y = m_max_velocity.y; }
-        }
-        else if (delta_y > 0) {
-
-            if (m_current_velocity.y > m_max_velocity.y) { m_current_velocity.y = m_max_velocity.y; }
-        }
+        Debug.Log("Current Velocity: " + VectorMath.printVector2(m_current_velocity));
 
     }
 
@@ -315,6 +333,35 @@ public class MinimalPlayerActions : MonoBehaviour
         }
 
         Physics2D.IgnoreLayerCollision(player_layer, enemy_layer, false);
+
+    }
+
+    void limitVelocity(Vector2 limit) {
+
+
+        // Direction Component Positive => Moving "North"/"East"
+        // Moving "North"/"East" => Velocity going "up" in direction
+        // Velocity going "up" in direction => Lock it from going above limit
+
+        // Direction Component Negative => Moving "South"/"West"
+        // Moving "South"/"West" => Velocity "lowering" in direction
+        // Velocity "lowering" in direction => Lock it from going below limit
+
+        if (m_current_direction.x < 0) {
+            if (m_current_velocity.x < limit.x) { m_current_velocity.x = limit.x; }
+        }
+        else if (m_current_direction.x > 0) {
+
+            if (m_current_velocity.x > limit.x) { m_current_velocity.x = limit.x; }
+        }
+
+        if (m_current_direction.y < 0) {
+            if (m_current_velocity.y < limit.y) { m_current_velocity.y = limit.y; }
+        }
+        else if (m_current_direction.y > 0) {
+
+            if (m_current_velocity.y > limit.y) { m_current_velocity.y = limit.y; }
+        }
 
     }
 

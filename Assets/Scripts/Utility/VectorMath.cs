@@ -49,8 +49,8 @@ public class VectorMath : MonoBehaviour
     */
     static public string printVector2(Vector2 input_vector) {
 
-        string vector_string = "[" + input_vector.x.ToString() +
-                                input_vector.y.ToString() + "]";
+        string vector_string = "[ " + input_vector.x.ToString() + ", " +
+                                input_vector.y.ToString() + " ]";
 
         return vector_string;
 
@@ -65,9 +65,9 @@ public class VectorMath : MonoBehaviour
     */
     static public string printVector3(Vector3 input_vector) {
 
-        string vector_string = "[" + input_vector.x.ToString() +
-                                input_vector.y.ToString() +
-                                input_vector.z.ToString() + "]";
+        string vector_string = "[ " + input_vector.x.ToString() + ", " +
+                                input_vector.y.ToString() + ", " +
+                                input_vector.z.ToString() + " ]";
 
         return vector_string;
 
@@ -135,7 +135,22 @@ public class VectorMath : MonoBehaviour
     *
     * @Return: Resulting summed vector
     */
-    static public void addToVector2(Vector2 input_vector, int x_inc, int y_inc) {
+    static public Vector2 addToVector2(Vector2 input_vector, int x_inc, int y_inc) {
+
+        Vector3 result_vector = new Vector3(input_vector.x + x_inc,
+                                            input_vector.y + y_inc);
+
+        return result_vector;
+
+    }
+
+    static public Vector3 getDifferenceVector3(Vector3 vector_a, Vector3 vector_b) {
+
+        Vector3 result_vector = new Vector3(vector_a.x - vector_b.x,
+                                            vector_a.y - vector_b.y,
+                                            vector_a.z - vector_b.z);
+
+        return result_vector;
 
     }
 

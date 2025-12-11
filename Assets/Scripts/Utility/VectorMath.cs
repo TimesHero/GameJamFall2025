@@ -144,11 +144,26 @@ public class VectorMath : MonoBehaviour
 
     }
 
+    /*
+    * @Brief: Subtracts two vectors and returns the resulting vector
+    *
+    *
+    * @Return: Vector whos coordinates are the different of two vector corresponding coordinates
+    */
     static public Vector3 getDifferenceVector3(Vector3 vector_a, Vector3 vector_b) {
 
         Vector3 result_vector = new Vector3(vector_a.x - vector_b.x,
                                             vector_a.y - vector_b.y,
                                             vector_a.z - vector_b.z);
+
+        return result_vector;
+
+    }
+
+    static public Vector2 getDifferenceVector2(Vector2 vector_a, Vector2 vector_b) {
+
+        Vector3 result_vector = new Vector3(vector_a.x - vector_b.x,
+                                            vector_a.y - vector_b.y);
 
         return result_vector;
 

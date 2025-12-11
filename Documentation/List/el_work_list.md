@@ -20,19 +20,27 @@ List of work completed or to be completed by El.
 
 ## Work List: Player Controls
 
-- [ ] Check player movement (Added by Maxim)
-- [ ] Add iframes
-- [ ] Fix velocity of player
+- [x] Check player movement (Added by Maxim)
+- [x] Add iframes
+- [x] Fix velocity of player
+- [ ] Setup player size change
+- [ ] Add obstacles
+- [ ] Setup obstacle collision
 
 ## Work Done
 
 - **2025-12-09**
-    * Add Documentation: index.md
-    * Add Documentation: Documentation Directory
-    * Add Documentation: Assets Subdirectories
-    * Add Documentation: Work Lists for all members
+    * Add Documentation
+        + Add Documentation: index.md
+        + Add Documentation: Documentation Directory
+        + Add Documentation: Assets Subdirectories
+        + Add Documentation: Work Lists for all members
     * Add player controls
     * Add player controls script: Assets/Scripts/PlayerActions
+    * Player Movement:
+        + Setup player mouse movement
+        + Add acceleration/deceleration to mouse movement
+        + Add max velocity to player movement
 
 [<< Return to Work Lists](./list.md)
 [<<< Return to Main](../../index.md)

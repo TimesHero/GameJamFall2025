@@ -248,7 +248,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 65923236}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 34476265}
+        m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
+        m_MethodName: ShowPanel
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &65923236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,7 +281,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3452156548846427376, guid: 18475b265f7dfa09dab5f9e36c5aae6e, type: 3}
+  m_Sprite: {fileID: 3889999793559488929, guid: 6d6505078f103d8419c05727ba275b82, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -383,7 +395,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 130383225}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 34476265}
+        m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
+        m_MethodName: ExitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &130383225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,7 +428,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3016419795675548689, guid: 27a89ae53bed3f9f9966be22422b63a6, type: 3}
+  m_Sprite: {fileID: 6853316077166303748, guid: 974f0105072b9fb45a669580f8670478, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -448,7 +472,7 @@ GameObject:
   - component: {fileID: 134829387}
   - component: {fileID: 134829386}
   m_Layer: 5
-  m_Name: Huricane
+  m_Name: Tornado
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -506,7 +530,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -4260895432378628638, guid: 293904b4ad5c6f92582482d124c41199, type: 3}
+  m_Sprite: {fileID: 8020143640844766479, guid: bc4b97ff5085df74790a36e48ab16964, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -743,7 +767,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -7161731955044911667, guid: 0753bf9f3d3a03be09315259c1c63eda, type: 3}
+  m_Sprite: {fileID: -7229086047103362753, guid: 87d616524a7620547b658777c8dfbd23, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1305,7 +1329,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Leaderboard
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

@@ -39,7 +39,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MinimalPlayerActions : MonoBehaviour
+public class PlayerActions : MonoBehaviour
 {
 
     // Camera needed to generate direction vector
@@ -50,6 +50,7 @@ public class MinimalPlayerActions : MonoBehaviour
     private Rigidbody2D m_player_body;
     private CircleCollider2D m_player_collider;
     private SpriteRenderer m_player_sprite;
+    private bool is_damage_state = false;
 
     // ATTRIBUTES: MOVEMENT
 
@@ -77,6 +78,7 @@ public class MinimalPlayerActions : MonoBehaviour
     [SerializeField] private float m_max_decay_rate = 0f;
     [SerializeField] private float m_min_decay_rate = 0f;
     [SerializeField] private float m_size_decay_rate = 0f;
+    private float m_base_decay_rate;
     [SerializeField] private float m_loss_size = 0f;
 
     private float m_current_power;
@@ -111,6 +113,7 @@ public class MinimalPlayerActions : MonoBehaviour
         m_size_decay_rate = setDefaultValuePerSecond(m_size_decay_rate, 0.1f);
         m_max_decay_rate = setDefaultValuePerSecond(m_max_decay_rate, 2f);
         m_min_decay_rate = setDefaultValuePerSecond(m_min_decay_rate, 0.1f);
+        m_base_decay_rate = m_size_decay_rate;
 
         m_current_power = 100;
 
@@ -136,34 +139,52 @@ public class MinimalPlayerActions : MonoBehaviour
         m_player_body.linearVelocity = m_current_velocity;
         decayPlayerSize();
         m_current_power = convertScaleToPower();
-        Debug.Log("New Player Scale: " + VectorMath.printVector3(m_player_object.transform.localScale));
-        Debug.Log("New Player Power: " + m_current_power);
-
+        updateDecayRate();
         // increasePlayerSize(0.01f);
     }
 
     void OnCollisionEnter2D(Collision2D obstacle) {
-        m_max_velocity = new Vector2(0, 0);
+        Debug.Log("Velocity Before:" + m_current_velocity);
+        Debug.Log("Acceleration Before:" + m_acceleration);
+        Debug.Log("Direction Before:" + m_current_direction);
+        Debug.Log("linearVelocity Before: " + m_player_body.linearVelocity);
         if (obstacle.gameObject.tag == "Obstacle") {
             if ( obstacle.gameObject.GetComponent<ObstacleManager>().getWeight() > m_current_power ) {
-                isDamageState(true);
-                m_acceleration = -(m_acceleration/4);
-                limitVelocity(m_max_velocity);
+                setDamageState(true);
+                m_current_velocity *= 0.9f;
                 m_size_decay_rate *= 1.5f;
             }
+            else {
+                consumeItem(obstacle);
+
+            }
         }
+        updateVelocity();
+        m_player_body.linearVelocity = m_current_velocity;
+    }
+
+    void OnCollisionStay2D(Collision2D obstacle) {
+        updateVelocity();
+        m_player_body.linearVelocity = m_current_velocity;
     }
 
     void OnCollisionExit2D(Collision2D obstacle) {
-        m_max_velocity = new Vector2(0, 0);
+        Debug.Log("Velocity Before:" + m_current_velocity);
+        Debug.Log("Acceleration Before:" + m_acceleration);
+        Debug.Log("Direction Before:" + m_current_direction);
+        Debug.Log("linearVelocity Before: " + m_player_body.linearVelocity);
         if (obstacle.gameObject.tag == "Obstacle") {
-            if ( obstacle.gameObject.GetComponent<ObstacleManager>().getWeight() > m_current_power ) {
-                isDamageState(false);
-                m_acceleration = -(m_acceleration*4);
-                limitVelocity(m_max_velocity);
+            if ( is_damage_state ) {
+                setDamageState(false);
                 m_size_decay_rate = (m_size_decay_rate / 1.5f);
             }
         }
+        updateVelocity();
+        m_player_body.linearVelocity = m_current_velocity;
+        Debug.Log("Velocity After:" + m_current_velocity);
+        Debug.Log("Acceleration After:" + m_acceleration);
+        Debug.Log("Direction After:" + m_current_direction);
+        Debug.Log("linearVelocity After: " + m_player_body.linearVelocity);
 
     }
 
@@ -190,8 +211,6 @@ public class MinimalPlayerActions : MonoBehaviour
     */
     private void triggerMove(InputAction.CallbackContext obj) {
 
-        Debug.Log("recieved click");
-
         updateCurrentDirection();
 
         updateMaxVelocity();
@@ -215,7 +234,6 @@ public class MinimalPlayerActions : MonoBehaviour
         // m_current_direction = m_current_direction.Normalize();
 
 
-        // Debug.Log("Current Direction on Click: " + VectorMath.printVector2(m_current_direction));
 
     }
 
@@ -261,8 +279,6 @@ public class MinimalPlayerActions : MonoBehaviour
         // }
         limitVelocity(m_max_velocity);
 
-        Debug.Log("Current Velocity: " + VectorMath.printVector2(m_current_velocity));
-
     }
 
     /*
@@ -305,7 +321,6 @@ public class MinimalPlayerActions : MonoBehaviour
         // transform.localScale needs a vector so we make a vector using increase amount
         Vector3 size_increase = new Vector3(increase_amount, increase_amount, 0);
         m_player_object.transform.localScale += size_increase;
-        // Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
 
     }
 
@@ -322,7 +337,6 @@ public class MinimalPlayerActions : MonoBehaviour
         // transform.localScale needs a vector so we make a vector using decrease amount
         Vector3 size_decrease = new Vector3(decrease_amount, decrease_amount, 0);
         m_player_object.transform.localScale -= size_decrease;
-        // Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
 
     }
 
@@ -343,26 +357,35 @@ public class MinimalPlayerActions : MonoBehaviour
 
     }
 
-    public void consumeItem(Collider2D obstacle) {
+    public void consumeItem(Collision2D obstacle) {
         m_current_power += obstacle.gameObject.GetComponent<ObstacleManager>().getFillValue();
         increasePlayerSize(convertPowerToScale());
-        // obstacle.gameObject.GetComponent<Transform>().position = ;
 
+        obstacle.gameObject.GetComponent<ObstacleManager>().consumeObstacle();
 
     }
 
-    private void isDamageState(bool new_state) {
 
-        if (new_state == true) {
+    private void setDamageState(bool new_state) {
+
+        if ((new_state == true) && (!is_damage_state)) {
 
             m_player_sprite.color = new Color(0.8f, 0, 0, 1f);
+            is_damage_state = true;
 
         }
         else {
 
             m_player_sprite.color = Color.white;
+            is_damage_state = false;
 
         }
+
+    }
+
+    private bool isDamageState(bool new_state) {
+
+        return (is_damage_state);
 
     }
 
@@ -529,6 +552,13 @@ public class MinimalPlayerActions : MonoBehaviour
     float convertPowerToScale() {
 
         return ((m_current_power / 100) + m_loss_size);
+
+    }
+
+    void updateDecayRate() {
+
+        m_size_decay_rate = m_base_decay_rate * m_player_body.transform.localScale.x;
+        limitDecayRate();
 
     }
 

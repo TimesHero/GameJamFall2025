@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 4950564173853727935}
   - component: {fileID: 3987654374827890446}
   - component: {fileID: 1851318433746511267}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -318,7 +318,13 @@ MonoBehaviour:
   m_main_camera: {fileID: 8646993616069806135}
   m_player_object: {fileID: 8793558782947403807}
   m_max_speed: 0
+  m_max_speed_upper_bound: 0
+  m_max_speed_lower_bound: 0
   m_acceleration: 0
+  m_max_acceleration: 0
+  m_min_acceleration: 0
+  m_max_decay_rate: 0
+  m_min_decay_rate: 0
   m_size_decay_rate: 0
   m_loss_size: 0
   m_move_confirm: {fileID: 0}

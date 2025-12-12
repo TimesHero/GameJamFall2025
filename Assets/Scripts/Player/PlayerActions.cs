@@ -101,18 +101,18 @@ public class PlayerActions : MonoBehaviour
     void Start() {
 
         // Set default values for the player movement if not set appropriately (i.e. if zero or below)
-        if (m_max_speed <= 0f) { m_max_speed = 5f; }
-        if (m_max_speed_upper_bound <= 0f) { m_max_speed_upper_bound = 6f; }
-        if (m_max_speed_lower_bound <= 0f) { m_max_speed_upper_bound = 3f; }
+        //if (m_max_speed <= 0f) { m_max_speed = 5f; }
+        //if (m_max_speed_upper_bound <= 0f) { m_max_speed_upper_bound = 6f; }
+        //if (m_max_speed_lower_bound <= 0f) { m_max_speed_upper_bound = 3f; }
 
 
-        m_acceleration = setDefaultValuePerSecond(m_acceleration, 2f);
-        m_max_acceleration = setDefaultValuePerSecond(m_max_acceleration, 6f);
-        m_min_acceleration = setDefaultValuePerSecond(m_max_acceleration, 2f);
+        //m_acceleration = setDefaultValuePerSecond(m_acceleration, 2f);
+        //m_max_acceleration = setDefaultValuePerSecond(m_max_acceleration, 6f);
+        //m_min_acceleration = setDefaultValuePerSecond(m_max_acceleration, 2f);
 
-        m_size_decay_rate = setDefaultValuePerSecond(m_size_decay_rate, 0.1f);
-        m_max_decay_rate = setDefaultValuePerSecond(m_max_decay_rate, 2f);
-        m_min_decay_rate = setDefaultValuePerSecond(m_min_decay_rate, 0.1f);
+        //m_size_decay_rate = setDefaultValuePerSecond(m_size_decay_rate, 0.1f);
+        //m_max_decay_rate = setDefaultValuePerSecond(m_max_decay_rate, 2f);
+        //m_min_decay_rate = setDefaultValuePerSecond(m_min_decay_rate, 0.1f);
         m_base_decay_rate = m_size_decay_rate;
 
         m_current_power = 100;
@@ -143,18 +143,19 @@ public class PlayerActions : MonoBehaviour
         // increasePlayerSize(0.01f);
     }
 
-    void OnCollisionEnter2D(Collision2D obstacle) {
+    void OnTriggerEnter2D(Collider2D obstacle) {
         Debug.Log("Velocity Before:" + m_current_velocity);
         Debug.Log("Acceleration Before:" + m_acceleration);
         Debug.Log("Direction Before:" + m_current_direction);
         Debug.Log("linearVelocity Before: " + m_player_body.linearVelocity);
         if (obstacle.gameObject.tag == "Obstacle") {
-            if ( obstacle.gameObject.GetComponent<ObstacleManager>().getWeight() > m_current_power ) {
+            ObstacleManager obstacle_manager = obstacle.gameObject.GetComponent<ObstacleManager>();
+            if ( obstacle_manager.getWeight() > m_current_power) {
                 setDamageState(true);
                 m_current_velocity *= 0.9f;
                 m_size_decay_rate *= 1.5f;
             }
-            else {
+            else if (!obstacle_manager.getConsumed()) {
                 consumeItem(obstacle);
 
             }
@@ -163,12 +164,12 @@ public class PlayerActions : MonoBehaviour
         m_player_body.linearVelocity = m_current_velocity;
     }
 
-    void OnCollisionStay2D(Collision2D obstacle) {
+    void OnTriggerStay2D(Collider2D obstacle) {
         updateVelocity();
         m_player_body.linearVelocity = m_current_velocity;
     }
 
-    void OnCollisionExit2D(Collision2D obstacle) {
+    void OnTriggerExit2D(Collider2D obstacle) {
         Debug.Log("Velocity Before:" + m_current_velocity);
         Debug.Log("Acceleration Before:" + m_acceleration);
         Debug.Log("Direction Before:" + m_current_direction);
@@ -342,7 +343,7 @@ public class PlayerActions : MonoBehaviour
 
     void decayPlayerSize() {
 
-        decreasePlayerSize(m_size_decay_rate);
+        decreasePlayerSize(m_size_decay_rate * Time.deltaTime);
         limitSize(m_loss_size);
         checkForLoss();
 
@@ -357,7 +358,7 @@ public class PlayerActions : MonoBehaviour
 
     }
 
-    public void consumeItem(Collision2D obstacle) {
+    public void consumeItem(Collider2D obstacle) {
         m_current_power += obstacle.gameObject.GetComponent<ObstacleManager>().getFillValue();
         increasePlayerSize(convertPowerToScale());
 
@@ -551,7 +552,7 @@ public class PlayerActions : MonoBehaviour
 
     float convertPowerToScale() {
 
-        return ((m_current_power / 100) + m_loss_size);
+        return ((m_current_power / 100) - m_loss_size);
 
     }
 

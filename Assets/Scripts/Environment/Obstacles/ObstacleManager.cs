@@ -14,8 +14,8 @@ public class ObstacleManager : MonoBehaviour
     void Start()
     {
 
-        if (weight <= 0) { weight = 1; }
-        if (fill_value <= 0) { fill_value = 1000; }
+        if (weight <= 0) { weight = 10; }
+        if (fill_value <= 0) { fill_value = 100; }
 
         current_consume_counter = 0f;
         consume_speed = 20f * (1f / Time.deltaTime);

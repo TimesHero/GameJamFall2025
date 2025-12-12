@@ -616,10 +616,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1125062342819845500, guid: 827e0bd26d754fab5b6e96a885b14317, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 1359510061}
     - target: {fileID: 3650830667806435133, guid: 827e0bd26d754fab5b6e96a885b14317, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.74
@@ -659,18 +655,6 @@ PrefabInstance:
     - target: {fileID: 3650830667806435133, guid: 827e0bd26d754fab5b6e96a885b14317, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5575059583871948550, guid: 827e0bd26d754fab5b6e96a885b14317, type: 3}
-      propertyPath: m_Mass
-      value: 0.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 5575059583871948550, guid: 827e0bd26d754fab5b6e96a885b14317, type: 3}
-      propertyPath: m_Simulated
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5575059583871948550, guid: 827e0bd26d754fab5b6e96a885b14317, type: 3}
-      propertyPath: m_Constraints
-      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5972287465462640653, guid: 827e0bd26d754fab5b6e96a885b14317, type: 3}
       propertyPath: m_Name

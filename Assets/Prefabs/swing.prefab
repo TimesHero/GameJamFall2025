@@ -108,8 +108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleManager
   weight: 160
   fill_value: 16
-  delta_weight: 0.6
-  delta_fill_value: 1
+  delta_weight: 0.7
+  delta_fill_value: 0.2
   player: {fileID: 0}
 --- !u!61 &-5512847247744148263
 BoxCollider2D:

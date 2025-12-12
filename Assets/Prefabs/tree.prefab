@@ -145,7 +145,7 @@ MonoBehaviour:
   weight: 160
   fill_value: 16
   delta_weight: 1.5
-  delta_fill_value: 0.6
+  delta_fill_value: 0.2
   player: {fileID: 0}
 --- !u!50 &-970065437014551159
 Rigidbody2D:

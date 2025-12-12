@@ -144,8 +144,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleManager
   weight: 310
   fill_value: 31
-  delta_weight: 2
-  delta_fill_value: 0.9
+  delta_weight: 4
+  delta_fill_value: 0.5
   player: {fileID: 0}
 --- !u!50 &4546981771213462650
 Rigidbody2D:

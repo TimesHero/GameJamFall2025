@@ -4129,15 +4129,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7029294797790527582, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
       propertyPath: m_loss_size
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7029294797790527582, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
       propertyPath: m_max_speed
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7029294797790527582, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
       propertyPath: m_acceleration
-      value: 10
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7029294797790527582, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
       propertyPath: m_move_confirm
@@ -4153,7 +4153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7029294797790527582, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
       propertyPath: m_size_decay_rate
-      value: 0.3
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7029294797790527582, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
       propertyPath: m_max_acceleration

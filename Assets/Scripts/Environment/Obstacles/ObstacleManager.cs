@@ -3,9 +3,12 @@ using UnityEngine;
 public class ObstacleManager : MonoBehaviour
 {
 
-    [SerializeField] private int weight;
-    [SerializeField] private int fill_value;
-    private GameObject player_object;
+    [SerializeField] private int weight = 100;
+    [SerializeField] private int fill_value = 10;
+    [SerializeField] private float delta_weight;
+    [SerializeField] private float delta_fill_value;
+
+    [SerializeField] private GameObject player;
     private bool consumed = false;
     private float current_consume_counter;
     private float consume_speed;
@@ -14,13 +17,17 @@ public class ObstacleManager : MonoBehaviour
     void Start()
     {
 
-        player_object = GameObject.FindWithTag("Player");
+        // if (weight <= 0) { weight = 1; }
+        // if (fill_value <= 0) { fill_value = 1000; }
 
-        //if (weight <= 0) { weight = 10; }
-        //if (fill_value <= 0) { fill_value = 100; }
+        // delta_weight = (float)weight / 100;
+        // delta_fill_value = (float)delta_fill_value / 100;
 
         current_consume_counter = 0f;
         consume_speed = 20f * (1f / Time.deltaTime);
+
+        player = GameObject.FindWithTag("Player");
+
     }
 
     // Update is called once per frame
@@ -28,10 +35,10 @@ public class ObstacleManager : MonoBehaviour
     {
         if (consumed == true) {
             if (current_consume_counter < consume_speed) {
-                transform.position = Vector3.MoveTowards(transform.position, player_object.transform.position, 10f * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 10f * Time.deltaTime);
                     current_consume_counter += (1f / Time.deltaTime);
-                    // Debug.Log("Current Consume Counter: " + current_consume_counter);
-                    // Debug.Log("Cosnume Speed: " + consume_speed);
+                    Debug.Log("Current Consume Counter: " + current_consume_counter);
+                    Debug.Log("Cosnume Speed: " + consume_speed);
         }
             else {
                 Destroy(gameObject);
@@ -40,9 +47,9 @@ public class ObstacleManager : MonoBehaviour
     }
 
     public void consumeObstacle() {
-        Debug.LogError("We Got This Far");
-        Destroy(gameObject.GetComponent<Collider2D>());
+
         consumed = true;
+        Destroy(gameObject);
 
     }
 
@@ -54,8 +61,11 @@ public class ObstacleManager : MonoBehaviour
         return fill_value;
     }
 
-    public bool getConsumed()
-    {
-        return consumed;
+    public float getDeltaWeight() {
+        return delta_weight;
+    }
+
+    public float getDeltaFillValue() {
+        return delta_fill_value;
     }
 }

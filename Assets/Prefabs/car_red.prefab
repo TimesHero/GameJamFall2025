@@ -108,6 +108,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnvironemtObstacle
   weight: 200
   fill_value: 20
+  delta_weight: 3
+  delta_fill_value: 1.2
+  player: {fileID: 0}
 --- !u!50 &8604749982709972835
 Rigidbody2D:
   serializedVersion: 5
@@ -165,7 +168,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

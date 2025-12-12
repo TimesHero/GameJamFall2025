@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CityScene.unity
     guid: 46f4aa6bd4531bc498f88e292560a242
+  - enabled: 1
+    path: Assets/Scenes/CityGreyboxScene.unity
+    guid: 8eb0a787675df6d48b943a87a4364bd0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   m_UseUCBPForAssetBundles: 0

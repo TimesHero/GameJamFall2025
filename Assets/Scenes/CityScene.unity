@@ -241,11 +241,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12cda791557ed9ddeb8e1bb780593d74, type: 3}
---- !u!20 &519420031 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 8646993616069806135, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
-  m_PrefabInstance: {fileID: 2967448119578152918}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &649652273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,36 +255,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: 32fcbb12f115b730eaa4b795780dd679, type: 3}
   m_ActionId: ddfe2bef-9fc9-4750-802b-70fc26fca429
---- !u!1 &1359510061 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8793558782947403807, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
-  m_PrefabInstance: {fileID: 2967448119578152918}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1359510069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359510061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48a3273f9bb39d7d189299feef2dae46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MinimalPlayerActions
-  m_main_camera: {fileID: 519420031}
-  m_player_object: {fileID: 1359510061}
-  m_max_speed: 0
-  m_max_speed_upper_bound: 0
-  m_max_speed_lower_bound: 0
-  m_acceleration: 0
-  m_max_acceleration: 0
-  m_min_acceleration: 0
-  m_max_decay_rate: 0
-  m_min_decay_rate: 0
-  m_size_decay_rate: 0
-  m_loss_size: 0
-  m_move_confirm: {fileID: 649652273}
 --- !u!1001 &1451702993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -517,20 +482,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12cda791557ed9ddeb8e1bb780593d74, type: 3}
---- !u!114 &1977983992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: player_movement/MoveConfirm
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
-  m_Asset: {fileID: -944628639613478452, guid: 32fcbb12f115b730eaa4b795780dd679, type: 3}
-  m_ActionId: ddfe2bef-9fc9-4750-802b-70fc26fca429
 --- !u!1001 &2967448119578152918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -539,10 +490,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1851318433746511267, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
-      propertyPath: m_move_confirm
-      value: 
-      objectReference: {fileID: 1977983992}
     - target: {fileID: 3143157042262434807, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -583,30 +530,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4950564173853727935, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
-      propertyPath: m_Mass
-      value: 100
+    - target: {fileID: 7029294797790527582, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
+      propertyPath: m_loss_size
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4950564173853727935, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
+    - target: {fileID: 7029294797790527582, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
+      propertyPath: m_move_confirm
+      value: 
+      objectReference: {fileID: 649652273}
     - target: {fileID: 8793558782947403807, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8979083392866851609, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
-      propertyPath: m_SortingOrder
-      value: 5
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1851318433746511267, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8020143640844766479, guid: bc4b97ff5085df74790a36e48ab16964, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8793558782947403807, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1359510069}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e548e25c531ed3d3eacfcf8cc18bd7be, type: 3}
 --- !u!1001 &4641846038445268761
 PrefabInstance:

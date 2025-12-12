@@ -39,7 +39,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MinimalPlayerActions : MonoBehaviour
+public class PlayerActions : MonoBehaviour
 {
 
     // Camera needed to generate direction vector
@@ -77,6 +77,7 @@ public class MinimalPlayerActions : MonoBehaviour
     [SerializeField] private float m_max_decay_rate = 0f;
     [SerializeField] private float m_min_decay_rate = 0f;
     [SerializeField] private float m_size_decay_rate = 0f;
+    private float m_base_decay_rate;
     [SerializeField] private float m_loss_size = 0f;
 
     private float m_current_power;
@@ -111,6 +112,7 @@ public class MinimalPlayerActions : MonoBehaviour
         m_size_decay_rate = setDefaultValuePerSecond(m_size_decay_rate, 0.1f);
         m_max_decay_rate = setDefaultValuePerSecond(m_max_decay_rate, 2f);
         m_min_decay_rate = setDefaultValuePerSecond(m_min_decay_rate, 0.1f);
+        m_base_decay_rate = m_size_decay_rate;
 
         m_current_power = 100;
 
@@ -136,9 +138,7 @@ public class MinimalPlayerActions : MonoBehaviour
         m_player_body.linearVelocity = m_current_velocity;
         decayPlayerSize();
         m_current_power = convertScaleToPower();
-        Debug.Log("New Player Scale: " + VectorMath.printVector3(m_player_object.transform.localScale));
-        Debug.Log("New Player Power: " + m_current_power);
-
+        updateDecayRate();
         // increasePlayerSize(0.01f);
     }
 
@@ -150,6 +150,9 @@ public class MinimalPlayerActions : MonoBehaviour
                 m_acceleration = -(m_acceleration/4);
                 limitVelocity(m_max_velocity);
                 m_size_decay_rate *= 1.5f;
+            }
+            else {
+                consumeItem(obstacle);
             }
         }
     }
@@ -190,8 +193,6 @@ public class MinimalPlayerActions : MonoBehaviour
     */
     private void triggerMove(InputAction.CallbackContext obj) {
 
-        Debug.Log("recieved click");
-
         updateCurrentDirection();
 
         updateMaxVelocity();
@@ -215,7 +216,6 @@ public class MinimalPlayerActions : MonoBehaviour
         // m_current_direction = m_current_direction.Normalize();
 
 
-        // Debug.Log("Current Direction on Click: " + VectorMath.printVector2(m_current_direction));
 
     }
 
@@ -261,8 +261,6 @@ public class MinimalPlayerActions : MonoBehaviour
         // }
         limitVelocity(m_max_velocity);
 
-        Debug.Log("Current Velocity: " + VectorMath.printVector2(m_current_velocity));
-
     }
 
     /*
@@ -305,7 +303,6 @@ public class MinimalPlayerActions : MonoBehaviour
         // transform.localScale needs a vector so we make a vector using increase amount
         Vector3 size_increase = new Vector3(increase_amount, increase_amount, 0);
         m_player_object.transform.localScale += size_increase;
-        // Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
 
     }
 
@@ -322,7 +319,6 @@ public class MinimalPlayerActions : MonoBehaviour
         // transform.localScale needs a vector so we make a vector using decrease amount
         Vector3 size_decrease = new Vector3(decrease_amount, decrease_amount, 0);
         m_player_object.transform.localScale -= size_decrease;
-        // Debug.Log("New Player Size: " + VectorMath.printVector2(m_player_sprite.size));
 
     }
 
@@ -343,13 +339,14 @@ public class MinimalPlayerActions : MonoBehaviour
 
     }
 
-    public void consumeItem(Collider2D obstacle) {
+    public void consumeItem(Collision2D obstacle) {
         m_current_power += obstacle.gameObject.GetComponent<ObstacleManager>().getFillValue();
         increasePlayerSize(convertPowerToScale());
-        // obstacle.gameObject.GetComponent<Transform>().position = ;
 
+        obstacle.gameObject.GetComponent<ObstacleManager>().consumeObstacle();
 
     }
+
 
     private void isDamageState(bool new_state) {
 
@@ -529,6 +526,13 @@ public class MinimalPlayerActions : MonoBehaviour
     float convertPowerToScale() {
 
         return ((m_current_power / 100) + m_loss_size);
+
+    }
+
+    void updateDecayRate() {
+
+        m_size_decay_rate = m_base_decay_rate * m_player_body.transform.localScale.x;
+        limitDecayRate();
 
     }
 

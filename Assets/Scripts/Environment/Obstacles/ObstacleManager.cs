@@ -5,15 +5,42 @@ public class ObstacleManager : MonoBehaviour
 
     [SerializeField] private int weight;
     [SerializeField] private int fill_value;
+    [SerializeField] private GameObject player;
+    private bool consumed = false;
+    private float current_consume_counter;
+    private float consume_speed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
+        if (weight <= 0) { weight = 1; }
+        if (fill_value <= 0) { fill_value = 1000; }
+
+        current_consume_counter = 0f;
+        consume_speed = 20f * (1f / Time.deltaTime);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (consumed == true) {
+            if (current_consume_counter < consume_speed) {
+                transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 10f * Time.deltaTime);
+                    current_consume_counter += (1f / Time.deltaTime);
+                    Debug.Log("Current Consume Counter: " + current_consume_counter);
+                    Debug.Log("Cosnume Speed: " + consume_speed);
+        }
+            else {
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    public void consumeObstacle() {
+
+        consumed = true;
+
     }
 
     public int getWeight() {

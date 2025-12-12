@@ -16,8 +16,8 @@ public class ObstacleManager : MonoBehaviour
 
         player_object = GameObject.FindWithTag("Player");
 
-        if (weight <= 0) { weight = 10; }
-        if (fill_value <= 0) { fill_value = 100; }
+        //if (weight <= 0) { weight = 10; }
+        //if (fill_value <= 0) { fill_value = 100; }
 
         current_consume_counter = 0f;
         consume_speed = 20f * (1f / Time.deltaTime);
@@ -40,7 +40,7 @@ public class ObstacleManager : MonoBehaviour
     }
 
     public void consumeObstacle() {
-
+        Debug.LogError("We Got This Far");
         Destroy(gameObject.GetComponent<Collider2D>());
         consumed = true;
 
@@ -52,5 +52,10 @@ public class ObstacleManager : MonoBehaviour
 
     public int getFillValue() {
         return fill_value;
+    }
+
+    public bool getConsumed()
+    {
+        return consumed;
     }
 }

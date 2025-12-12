@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 6998405070663068013}
   - component: {fileID: 2420519353048556925}
   - component: {fileID: 7587644639031302044}
-  - component: {fileID: 367631230947969659}
-  m_Layer: 0
+  - component: {fileID: 2034956034400850781}
+  m_Layer: 9
   m_Name: tree
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -129,7 +129,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0.029020151, y: 0.049236935}
   m_Radius: 1.3055073
---- !u!114 &367631230947969659
+--- !u!114 &2034956034400850781
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,7 +138,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 2667388757318950511}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 395bfa6863774d84cbd588fa52453efd, type: 3}
+  m_Script: {fileID: 11500000, guid: f391a929f10b6f928ace70d738d15be8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ConsumableObjectHandler
-  m_obstacle_type: 3
+  m_EditorClassIdentifier: Assembly-CSharp::ObstacleManager
+  weight: 160
+  fill_value: 16

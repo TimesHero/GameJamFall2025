@@ -5,7 +5,7 @@ public class ObstacleManager : MonoBehaviour
 
     [SerializeField] private int weight;
     [SerializeField] private int fill_value;
-    [SerializeField] private GameObject player;
+    private GameObject player_object;
     private bool consumed = false;
     private float current_consume_counter;
     private float consume_speed;
@@ -13,6 +13,8 @@ public class ObstacleManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
+        player_object = GameObject.FindWithTag("Player");
 
         if (weight <= 0) { weight = 10; }
         if (fill_value <= 0) { fill_value = 100; }
@@ -26,10 +28,10 @@ public class ObstacleManager : MonoBehaviour
     {
         if (consumed == true) {
             if (current_consume_counter < consume_speed) {
-                transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 10f * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, player_object.transform.position, 10f * Time.deltaTime);
                     current_consume_counter += (1f / Time.deltaTime);
-                    Debug.Log("Current Consume Counter: " + current_consume_counter);
-                    Debug.Log("Cosnume Speed: " + consume_speed);
+                    // Debug.Log("Current Consume Counter: " + current_consume_counter);
+                    // Debug.Log("Cosnume Speed: " + consume_speed);
         }
             else {
                 Destroy(gameObject);
@@ -39,6 +41,7 @@ public class ObstacleManager : MonoBehaviour
 
     public void consumeObstacle() {
 
+        Destroy(gameObject.GetComponent<Collider2D>());
         consumed = true;
 
     }

@@ -50,6 +50,7 @@ public class PlayerActions : MonoBehaviour
     private Rigidbody2D m_player_body;
     private CircleCollider2D m_player_collider;
     private SpriteRenderer m_player_sprite;
+    private bool is_damage_state = false;
 
     // ATTRIBUTES: MOVEMENT
 
@@ -143,30 +144,47 @@ public class PlayerActions : MonoBehaviour
     }
 
     void OnCollisionEnter2D(Collision2D obstacle) {
-        m_max_velocity = new Vector2(0, 0);
+        Debug.Log("Velocity Before:" + m_current_velocity);
+        Debug.Log("Acceleration Before:" + m_acceleration);
+        Debug.Log("Direction Before:" + m_current_direction);
+        Debug.Log("linearVelocity Before: " + m_player_body.linearVelocity);
         if (obstacle.gameObject.tag == "Obstacle") {
             if ( obstacle.gameObject.GetComponent<ObstacleManager>().getWeight() > m_current_power ) {
-                isDamageState(true);
-                m_acceleration = -(m_acceleration/4);
-                limitVelocity(m_max_velocity);
+                setDamageState(true);
+                m_current_velocity *= 0.9f;
                 m_size_decay_rate *= 1.5f;
             }
             else {
                 consumeItem(obstacle);
+
             }
         }
+        updateVelocity();
+        m_player_body.linearVelocity = m_current_velocity;
+    }
+
+    void OnCollisionStay2D(Collision2D obstacle) {
+        updateVelocity();
+        m_player_body.linearVelocity = m_current_velocity;
     }
 
     void OnCollisionExit2D(Collision2D obstacle) {
-        m_max_velocity = new Vector2(0, 0);
+        Debug.Log("Velocity Before:" + m_current_velocity);
+        Debug.Log("Acceleration Before:" + m_acceleration);
+        Debug.Log("Direction Before:" + m_current_direction);
+        Debug.Log("linearVelocity Before: " + m_player_body.linearVelocity);
         if (obstacle.gameObject.tag == "Obstacle") {
-            if ( obstacle.gameObject.GetComponent<ObstacleManager>().getWeight() > m_current_power ) {
-                isDamageState(false);
-                m_acceleration = -(m_acceleration*4);
-                limitVelocity(m_max_velocity);
+            if ( is_damage_state ) {
+                setDamageState(false);
                 m_size_decay_rate = (m_size_decay_rate / 1.5f);
             }
         }
+        updateVelocity();
+        m_player_body.linearVelocity = m_current_velocity;
+        Debug.Log("Velocity After:" + m_current_velocity);
+        Debug.Log("Acceleration After:" + m_acceleration);
+        Debug.Log("Direction After:" + m_current_direction);
+        Debug.Log("linearVelocity After: " + m_player_body.linearVelocity);
 
     }
 
@@ -348,18 +366,26 @@ public class PlayerActions : MonoBehaviour
     }
 
 
-    private void isDamageState(bool new_state) {
+    private void setDamageState(bool new_state) {
 
-        if (new_state == true) {
+        if ((new_state == true) && (!is_damage_state)) {
 
             m_player_sprite.color = new Color(0.8f, 0, 0, 1f);
+            is_damage_state = true;
 
         }
         else {
 
             m_player_sprite.color = Color.white;
+            is_damage_state = false;
 
         }
+
+    }
+
+    private bool isDamageState(bool new_state) {
+
+        return (is_damage_state);
 
     }
 
